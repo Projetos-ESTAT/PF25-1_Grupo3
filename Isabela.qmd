@@ -1,0 +1,157 @@
+---
+# Nome do arquivo PDF gerado na pasta resultado
+output-file: "Isabela"
+---
+
+```{r setup}
+source("rdocs/source/packages.R")
+```
+
+# Análises
+
+## Análise 1
+
+**Introdução** 
+
+\vspace{1em}
+
+Essa análise tem como objetivo compreender a evolução dos grupos em situação de pobreza e foi feita utilizando três variáveis quantitativas discretas (`indigenas_pobreza`, `quilombolas_pobreza` e `ciganos_pobreza`), as quais representam o número de indivíduos do grupo em situação de pobreza.  
+
+\vspace{2em}
+
+_Quadro 1:_  
+
+\vspace{1em}
+
+\begin{tabular} { | l |
+			S[table-format = 4.2]
+			|}
+	\hline
+		\textbf{Estatística} & \textbf{Valor} \\
+		\hline
+		Média & 14178,56 \\
+		Desvio Padrão & 1329,35 \\
+		Variância & 1767161 \\
+		Mínimo & 11938 \\
+		1º Quartil & 12985,75 \\
+		Mediana & 14176,5 \\
+		3º Quartil & 15310,5 \\
+		Máximo & 16711 \\
+	\hline
+	\end{tabular}
+
+\vspace{2em}
+
+O quadro 1 apresenta, de acordo com as referências temporais, medidas descritivas da variável `indigenas_pobreza`. Observa-se que a média do número de indígenas em situação de pobreza é de aproximadamente 14.179 indivíduos, bem próxima da mediana (14.177), sugerindo uma distribuição simétrica. Além disso, percebe-se que os dados se concentram entre os valores 12.986 e 15.310 e, a partir dos valores de mínimo(11.938) e de máximo (16.711), podemos inferir que houveram períodos em que as quantidades de indígenas pobres foram muito menores ou muito maiores o comum.  
+
+\vspace{2em}
+
+_Quadro 2:_  
+
+\vspace{1em}
+
+\begin{tabular} { | l |
+			S[table-format = 4.2]
+			|}
+	\hline
+		\textbf{Estatística} & \textbf{Valor} \\
+		\hline
+		Média & 10754,51 \\
+		Desvio Padrão & 1196,41 \\
+		Variância & 1431399 \\
+		Mínimo & 7927 \\
+		1º Quartil & 10008,5 \\
+		Mediana & 10717,5 \\
+		3º Quartil & 11741,75 \\
+		Máximo & 12770 \\
+	\hline
+	\end{tabular}
+	
+\vspace{2em}
+	
+O quadro 2 possui as mesmas medidas do quadro 1, porém, para a váriavel	`quilombolas_pobreza`. Nota-se que essa variável possui uma distribuição levemente assimétrica à direita, visto que a mediana (10.718) é um pouco menor que a média (10.755). Outrossim, os dados se concentram entre 10.009 e 11718, um intervalo menor do que para os indígenas e com valores distoantes mais distantes do intervalo.  
+
+\vspace{2em}
+
+_Quadro 3:_  
+
+\vspace{1em}
+
+\begin{tabular} { | l |
+			S[table-format = 3.2]
+			|}
+	\hline
+		\textbf{Estatística} & \textbf{Valor} \\
+		\hline
+		Média & 531,02 \\
+		Desvio Padrão & 177,2 \\
+		Variância & 31400,95 \\
+		Mínimo & 119 \\
+		1º Quartil & 442 \\
+		Mediana & 600,5 \\
+		3º Quartil & 650,5 \\
+		Máximo & 827 \\
+	\hline
+	\end{tabular}
+
+\vspace{2em}
+
+O quadro 3 apresenta as medidas descritivas da variável `ciganos_pobreza`.Inicialmente, percebe-se, por meio do valor de máximo (827), que a quantidade de ciganos pobres é muito menor do que dos outros grupos. Além disso, o fato de a mediana ser bem maior que a média, mostra que a distribuição é levemente assimétrica à esquerda. Observando também o valor de mínimo (119) comparado ao primeiro quartil (442) e o valor de máximo (827)  comparado ao terceiro quartil (651), observa-se a presença de valores muito distoantes da maioria.  
+
+\vspace{2em}
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+library(tidyverse)
+indices_pobreza_consolidado <- read_csv("indices_pobreza_consolidado.csv")
+```
+
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+dados_ano= indices_pobreza_consolidado %>%
+  mutate(ano= substr(referencia, 4, 7)) %>%
+  group_by(ano) %>%
+  summarise(indigenas_pobreza= sum(indigenas_pobreza, na.rm = TRUE),
+            quilombolas_pobreza= sum(quilombolas_pobreza, na.rm = TRUE),
+            ciganos_pobreza= sum(ciganos_pobreza, na.rm = TRUE))
+
+dados_longos <- dados_ano %>%
+  pivot_longer(cols = c(indigenas_pobreza, quilombolas_pobreza, ciganos_pobreza),
+               names_to = "Grupos",
+               values_to = "quantidade") %>%
+  mutate(Grupos = recode(Grupos,
+                         "indigenas_pobreza" = "Indígenas",
+                         "quilombolas_pobreza" = "Quilombolas",
+                         "ciganos_pobreza" = "Ciganos"))
+
+```
+
+_Gráfico 1:_  
+
+\vspace{1em}
+
+```{r echo=FALSE}
+#| fig-cap: "Gráfico 1"
+
+ggplot(dados_longos) +
+  aes(x = ano, y = quantidade, group = Grupos, colour = Grupos) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  labs(x = "Ano", 
+       y = "Quantidade de indivíduos", 
+       title = "Evolução anual da pobreza por grupo") +
+  theme_estat() 
+
+```
+
+\vspace{2em}
+
+A partir do gráfico 1, constata-se as taxas de crescimento do número de indígenas e de quilombolas em situação de pobreza são considerávelmente semelhantes, pórem, a curva dos indígenas possui 3 pontos de máximo local equanto a curva dos quilombolas apresenta 2. Nesse entremeio, é perceptível que a taxa de crescimento dos ciganos com o passar dos anos é praticamente nula. Ademais, é importante resaltar que o a quantidade anual de indígenas pobres no périodo analisado sempre foi maior que dos outros grupos.   
+
+\vspace{2em}
+
+**Conclusão**  
+
+\vspace{1em}
+
+Os resultados dessa primeira análise sugerem que os indígenas e os quilombolas são grupos sociais que evoluíram de forma semelhante em quantidade de indivíduos em situação de pobreza durante o período analisado. Enquanto isso os ciganos tiveram variações ínfimas em relação ao todo.
