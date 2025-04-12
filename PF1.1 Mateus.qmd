@@ -1,0 +1,47 @@
+---
+outpu-file: "Mateus"
+---
+
+```{r setup}
+source("rdocs/source/packages.R")
+```
+
+# Análises
+## Análise 1
+
+**Introdução**
+
+\vspace{1em}
+
+Essa nálise tem por objetivo analisar a evolução das taxas dos índices de situação de pobreza e foi realizada utilizando as variáveis quantitativas discretas ('porcentagem_pobreza', 'porcentagem_extrema_pobreza', 'porcentagem_vulnerabilidade'), que representam a porcentagem de indivíduos em cada uma dessas situações.
+
+\vspace{2em}
+
+_Gáfico 1:_
+
+\vspace{1em}
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+library(tidyverse)
+indices_pobreza_consolidado<-read.csv("indices_pobreza_consolidade.csv")
+```
+
+
+```{r echo=FALSE}
+#| fig-cap: "Gráfico 1"
+
+ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_pobreza)) +
+  geom_line(color = "#003366", linewidth = 1.2) +
+  geom_smooth(method = "loess", color = "#FF6600") +
+  labs(title = "Evolução da Taxa de Pobreza no Brasil (2012-2022)",
+       subtitle = "Porcentagem da população em situação de pobreza",
+       x = "Ano",
+       y = "Taxa de Pobreza (%)") +
+  scale_y_continuous(labels = percent_format(accuracy = 1), 
+                     limits = c(0, NA)) +
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
+  theme_estat() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(size = 14, face = "bold"))
+
+```
