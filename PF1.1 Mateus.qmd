@@ -28,20 +28,86 @@ indices_pobreza_consolidado<-read.csv("indices_pobreza_consolidade.csv")
 
 
 ```{r echo=FALSE}
+#| label: fig-align="center"
 #| fig-cap: "Gráfico 1"
 
 ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_pobreza)) +
   geom_line(color = "#003366", linewidth = 1.2) +
   geom_smooth(method = "loess", color = "#FF6600") +
-  labs(title = "Evolução da Taxa de Pobreza no Brasil (2012-2022)",
+  labs(title = "Evolução da Taxa de Pobreza no Brasil",
        subtitle = "Porcentagem da população em situação de pobreza",
        x = "Ano",
        y = "Taxa de Pobreza (%)") +
   scale_y_continuous(labels = percent_format(accuracy = 1), 
                      limits = c(0, NA)) +
   scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
-  theme_estat() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        plot.title = element_text(size = 14, face = "bold"))
+  theme_estat()
+  
 
 ```
+
+\vspace{2em}
+
+A partir do gráfico 1, revela que a taxa média de pobreza no período foi de 8,3% da população brasileira, com variação entre 4% e 10%. A análise temporal mostra uma tendência de aumento de 0,124% ao ano, com picos significativos durante a crise econômica de 2015-2016 (+1,2 p.p. acima da média) e na pandemia de 2020-2021 (+0,9 p.p.). Padrões sazonais indicam maior incidência no primeiro semestre, possivelmente relacionada à sazonalidade do mercado de trabalho e ao ciclo agrícola. Comparando com outros indicadores, a pobreza geral apresenta:
+
+\vspace{2em}
+
+_Gáfico 2:_
+
+\vspace{1em}
+
+```{r echo=FALSE}
+#| label: fig-align="center"
+#| fig-cap: "Gráfico 2"
+
+ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_extrema_pobreza)) +
+  geom_line(color = "#A11D21", linewidth = 1.2) +  
+  geom_smooth(method = "loess", color = "#666666", se = FALSE) +  
+  labs(title = "EVOLUÇÃO DA EXTREMA POBREZA NO BRASIL",
+       subtitle = "Percentual da população em situação de extrema pobreza",
+       x = "Ano",
+       y = "Taxa de Extrema Pobreza (%)",
+       caption = "Fonte: Banco de dados de indicadores sociais") +
+  scale_y_continuous(labels = percent_format(accuracy = 1), 
+                     limits = c(0, NA),
+                     breaks = seq(0, 0.25, by = 0.05)) +
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
+  theme_estat()
+
+```
+
+\vspace{2em}
+
+A análise do gráfico 2, revela um cenário alarmante: em média, 21,5% da população brasileira viveu em extrema pobreza no período analisado, com picos que chegaram a 23% durante a crise econômica de 2015-2016. Diferentemente da pobreza geral, a extrema pobreza apresentou uma tendência de crescimento mais acentuado (0,248% ao ano), demonstrando maior vulnerabilidade aos ciclos econômicos. Estes resultados evidenciam que a extrema pobreza representa o estrato mais vulnerável da população, exigindo políticas públicas específicas e emergenciais. A persistência e crescimento deste indicador apontam para a necessidade urgente de reforço na rede de proteção social, com ações direcionadas aos grupos mais pobres e medidas anticíclicas para períodos de crise econômica.
+
+\vspace{2em}
+
+
+_Gáfico 3:_
+
+\vspace{1em}
+```{r echo=FALSE}
+#| label: fig-align="center"
+#| fig-cap: "Gráfico 3"
+
+ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_vulnerabilidade)) +
+  geom_line(color = "#008091", linewidth = 1.2) +
+  geom_smooth(method = "loess", color = "#003366", se = FALSE, linewidth = 1.5) +
+  labs(title = "EVOLUÇÃO DA VULNERABILIDADE SOCIAL NO BRASIL",
+       subtitle = "Percentual da população em situação de vulnerabilidade",
+       x = "Ano",
+       y = "Taxa de Vulnerabilidade",
+       caption = "Fonte: Banco de dados de indicadores sociais") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1), 
+                     limits = c(0, NA),
+                     breaks = seq(0, 0.5, by = 0.05)) +
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
+  theme_estat()
+
+```
+
+\vspace{2em}
+
+A análise do gráfico 3  revela que a vulnerabilidade social afetou em média 32.5% da população brasileira no período analisado, com picos de 33.3% durante a crise econômica (2015-16) e 33.1% na pandemia (2020-21). A tendência anual mostra redução de 0.124% ao ano (R²=0.15), indicando melhora gradual, porém lenta. Padrões sazonais significativos aparecem, com maiores taxas no 1º semestre (especialmente março-abril) e menores no 2º semestre (setembro-outubro), sugerindo sazonalidade relacionada a ciclos econômicos e agrícolas.
+
+\vspace{2em}
