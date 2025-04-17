@@ -27,6 +27,19 @@ source("rdocs/source/packages.R")
 # Análise 1
 ## Evolução dos índices de pobreza
 
+dados_pobreza <- dados %>%
+  mutate(
+    data = ymd(paste0(periodo, "01")),
+    ano = year(data),
+    mes = month(data),
+    pobreza_milhoes = pobreza / 1000000,
+    extrema_pobreza_milhoes = extrema_pobreza / 1000000,
+    total_milhoes = total / 1000000
+  ) %>%
+  arrange(data)
+
+
+
 estatisticas_pobreza <- dados_pobreza %>%
   summarise(
     Média = mean(porcentagem_pobreza),
