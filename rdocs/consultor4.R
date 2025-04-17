@@ -26,7 +26,7 @@ source("rdocs/source/packages.R")
 
 # Análise 1
 ## Evolução dos índices de pobreza
-
+dados <- read_csv("indices_pobreza_consolidado.csv")
 dados_pobreza <- dados %>%
   mutate(
     data = ymd(paste0(periodo, "01")),
