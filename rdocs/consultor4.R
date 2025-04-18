@@ -110,3 +110,67 @@ ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_vulner
                      breaks = seq(0, 0.5, by = 0.05)) +
   scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
   theme_estat()
+
+
+#Análise 1.1 refeita no padrão
+
+ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_pobreza)) +
+  geom_line(color = "#003366", linewidth = 1.2) +
+  geom_point(colour = "#A11D21", size = 2) +
+  labs(title = "Evolução da Taxa de Pobreza no Brasil",
+       x = "Ano",
+       y = "Taxa de Pobreza (%)") +
+  theme_estat()
+
+#Análise 1.2 refeita no padrão
+
+ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_extrema_pobreza)) +
+  geom_line(color = "#A11D21", linewidth = 1.2) +
+  geom_point(colour = "#008091", size = 2) +
+  labs(title = "Evolução da Taxa de Extrema Pobreza no Brasil",
+       x = "Ano",
+       y = "Taxa de Extrema Pobreza (%)") +
+  theme_estat()
+
+#Análise 1.3 refeita no padrão
+
+ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_vulnerabilidade)) +
+  geom_line(color = "#008091", linewidth = 1.2) +
+  geom_point(colour = "#663333", size = 2) +
+  labs(title = "Evolução de Vulnerabilidade no Brasil",
+       x = "Ano",
+       y = "Taxa de Vulnerabilidade (%)") +
+  theme_estat()
+
+
+#Análise 2.1 Distribuição do número de famílias em situação de pobreza
+
+ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = familias_pobreza)) +
+  geom_line(color = "#008091", linewidth = 1) +
+  geom_point(colour = "#A11D21", size = 2) +
+  labs(title = "Evolução do número de famílias em pobreza",
+       x = "Ano",
+       y = "Número de famílias") +
+  theme_estat()
+
+
+#Análise 2.2 Distribuição do número de famílias em situação de estrema pobreza
+
+ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = familias_extrema_pobreza)) +
+  geom_line(color = "#003366", linewidth = 1) +
+  geom_point(colour = "#FF6600", size = 2) +
+  labs(title = "Evolução do número de famílias em extrema pobreza",
+       x = "Ano",
+       y = "Número de famílias") +
+  theme_estat()
+
+
+#Análise 2.3 Distribuição do número de famílias em situação de vulnerabilidade
+
+ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = familias_vulnerabilidade)) +
+  geom_line(color = "#041835", linewidth = 1) +
+  geom_point(colour = "#A11D21", size = 2) +
+  labs(title = "Evolução do número de famílias em vulnerabilidade",
+       x = "Ano",
+       y = "Número de famílias") +
+  theme_estat()

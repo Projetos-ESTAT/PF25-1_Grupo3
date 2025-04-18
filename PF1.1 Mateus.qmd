@@ -14,7 +14,7 @@ source("rdocs/consultor4.R")
 
 
 
-Essa nálise tem por objetivo analisar a evolução das taxas dos índices de situação de pobreza e foi realizada utilizando as variáveis quantitativas discretas ('porcentagem_pobreza', 'porcentagem_extrema_pobreza', 'porcentagem_vulnerabilidade'), que representam a porcentagem de indivíduos em cada uma dessas situações.
+Essa análise tem por objetivo observar a evolução das taxas dos índices de situação de pobreza e foi realizada utilizando-se dos números colhidos afim de demonsntrar a situação em que se encontra a população Brasileira no período entre 2012 e 2022, a seguir iremos dar ênfase nos pontos propostos e apresentar os resultados encontrados em nossas análises.
 
 
 
@@ -89,4 +89,64 @@ ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_vulner
 
 
 A análise do $\ref{fig-Gráfico3}$, revela que a vulnerabilidade social afetou em média 32.5% da população brasileira no período analisado, com picos de 33.3% durante a crise econômica (2015-16) e 33.1% na pandemia (2020-21). A tendência anual mostra redução de 0.124% ao ano (R²=0.15), indicando melhora gradual, porém lenta. Padrões sazonais significativos aparecem, com maiores taxas no 1º semestre (especialmente março-abril) e menores no 2º semestre (setembro-outubro), sugerindo sazonalidade relacionada a ciclos econômicos e agrícolas.
+
+
+
+
+```{r echo=FALSE}
+#| label: fig-Gráfico4
+#| fig-cap: "Gráfico de linhas famílias em situação de pobreza por ano"
+
+ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = familias_pobreza)) +
+  geom_line(color = "#008091", linewidth = 1) +
+  geom_point(colour = "#A11D21", size = 2) +
+  labs(title = "Evolução do número de famílias em pobreza",
+       x = "Ano",
+       y = "Número de famílias") +
+  theme_estat()
+  
+
+```
+
+
+A análise do $\ref{fig-Gráfico4}$ permite observar que entre agosto de 2012 e setembro de 2022, o número de famílias em situação de pobreza no Brasil apresentou variações significativas, influenciadas por fatores econômicos e políticas públicas. No início do período (2012-2014), os valores se mantiveram estáveis entre 5,2 e 5,4 milhões de famílias, com leve queda em 2014. Durante a crise econômica (2015-2017), houve redução acentuada para cerca de 4 milhões em 2016, refletindo os impactos da recessão, enquanto a pandemia de COVID-19 (2020) trouxe uma queda temporária para 2,8-3 milhões de famílias, graças ao auxílio emergencial. No entanto, a partir de 2021, os números voltaram a subir (3-3,5 milhões), pressionados pelo fim dos benefícios e pela inflação. Apesar da redução de aproximadamente 34% ao longo da década, a persistência de patamares elevados após 2022 revela desafios estruturais, como desigualdade e mercado de trabalho fragilizado, destacando a sensibilidade desse indicador a crises e intervenções governamentais. 
+
+
+```{r echo=FALSE}
+#| label: fig-Gráfico5
+#| fig-cap: "Gráfico de linhas famílias em situação de extrema pobreza por ano"
+
+ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = familias_extrema_pobreza)) +
+  geom_line(color = "#003366", linewidth = 1) +
+  geom_point(colour = "#FF6600", size = 2) +
+  labs(title = "Evolução do número de famílias em extrema pobreza",
+       x = "Ano",
+       y = "Número de famílias") +
+  theme_estat()
+  
+
+```
+
+
+a análise do $\ref{fig-Gráfico5}$ mostra que O número de famílias em extrema pobreza (familias_extrema_pobreza) apresentou uma trajetória mais volátil e preocupante do que a pobreza geral no período analisado (agosto/2012 a setembro/2022). Entre 2012 e 2014, os valores se mantiveram elevados, oscilando entre 12,8 e 14 milhões de famílias, com picos em 2014, possivelmente associados ao agravamento da crise econômica pré-recessão. A partir de 2015, houve um crescimento acentuado, atingindo 14-15 milhões de famílias em 2016-2017, refletindo os efeitos da recessão e do desemprego, que empurraram mais famílias para a pobreza extrema. Durante a pandemia (2020), houve uma redução temporária (para 13-14 milhões), explicada pela expansão do auxílio emergencial, mas os números voltaram a subir drasticamente em 2021-2022, ultrapassando 19 milhões de famílias em meados de 2022 – o maior patamar da série histórica –, impulsionados pelo fim dos benefícios, inflação e crise social pós-pandemia. Essa trajetória ascendente contrasta com a redução na pobreza moderada, sugerindo um aprofundamento da desigualdade, em que as famílias mais vulneráveis migraram para condições ainda mais críticas. A análise revela que, diferentemente da pobreza geral, a extrema pobreza não apresentou melhora estrutural na década, com agravamento recente, exigindo políticas públicas direcionadas a esse grupo específico.
+
+
+```{r echo=FALSE}
+#| label: fig-Gráfico6
+#| fig-cap: "Gráfico de linhas famílias em situação de vulnerabilidade"
+
+ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = familias_vulnerabilidade)) +
+  geom_line(color = "#041835", linewidth = 1) +
+  geom_point(colour = "#A11D21", size = 2) +
+  labs(title = "Evolução do número de famílias em vulnerabilidade",
+       x = "Ano",
+       y = "Número de famílias") +
+  theme_estat()
+
+  
+
+```
+
+
+A análise do $\ref{fig-Gráfico6}$ mostra que O número de famílias vulneráveis apresentou flutuações significativas no período, iniciando em patamares elevados (18,1-18,7 milhões entre 2012-2014) e atingindo seu menor nível durante a pandemia (16,2-16,6 milhões em 2020), graças ao auxílio emergencial. Contudo, a partir de 2021 houve uma piora acentuada, superando 23 milhões em 2022 - o maior valor da série histórica. Esta trajetória revela que, enquanto políticas emergenciais mostraram eficácia temporária, a vulnerabilidade estrutural se agravou no longo prazo, com famílias saindo da pobreza apenas para entrar em situação de risco, exigindo abordagens preventivas mais efetivas. Os dados mostram ainda que crises econômicas (2015-2016) e sociais (2020-2022) funcionaram como aceleradores deste processo, evidenciando a necessidade de políticas sociais mais resilientes a choques externos.
 
