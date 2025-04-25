@@ -174,3 +174,14 @@ ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = familias_vulnerabi
        x = "Ano",
        y = "Número de famílias") +
   theme_estat()
+
+
+#Análise 3
+
+ggplot(dados_pobreza, aes(x = data, y = indigenas_pobreza)) +
+  geom_line(color = "#041835", linewidth = 1) +
+  geom_point(colour = "#A11D21", size = 2) +
+  labs(title = "Evolução do número de indígenas em situação de pobreza",
+       x = "Ano",
+       y = "Número de famílias") +
+  theme_estat()

@@ -7,9 +7,192 @@ outpu-file: "Mateus"
 source("rdocs/consultor4.R")
 ```
 
+# Introdução
+
+Essa análise tem por objetivo observar a evolução das taxas dos índices de situação de pobreza e foi realizada utilizando-se dos números colhidos afim de demonsntrar a situação em que se encontra a população Brasileira no período entre 2012 e 2022, a seguir iremos dar ênfase nos pontos propostos e apresentar os resultados encontrados em nossas análises.
+
+# Referencial Teórico
+## Média
+
+A média é a soma das observações dividida pelo número total delas, dada pela fórmula:
+
+$$\bar{X}=\frac{\sum\limits_{i=1}^{n}X_i}{n}$$
+
+Com:
+
+-   $i = 1, \, 2, \, ..., \, n$
+
+-   $n =$ número total de observações
+
+## Mediana
+
+Sejam as $n$ observações de um conjunto de dados $X=X_{(1)},X_{(2)},\ldots, X_{(n)}$ de determinada variável ordenadas de forma crescente. A mediana do conjunto de dados $X$ é o valor que deixa metade das observações abaixo dela e metade dos dados acima.
+
+Com isso, pode-se calcular a mediana da seguinte forma:
+
+$$
+med(X) =
+    \begin{cases}
+         X_{\frac{n+1}{2}}, \textrm{para n ímpar} \\
+         \frac{X_{\frac{n}{2}}+X_{\frac{n}{2} + 1}}{2}, \textrm{para n par} \\
+    \end{cases}
+$$
+
+## Quartis
+
+Os quartis são separatrizes que dividem o conjunto de dados em quatro partes iguais. O primeiro quartil (ou inferior) delimita os 25% menores valores, o segundo representa a mediana, e o terceiro delimita os 25% maiores valores. Inicialmente deve-se calcular a posição do quartil:
+
+-   Posição do primeiro quartil $P_1$: $$P_1=\frac{n+1}{4}$$
+
+-   Posição da mediana (segundo quartil) $P_2$: $$P_2 = \frac{n+1}{2}$$
+
+-   Posição do terceiro quartil $P_3$: $$P_3=\frac{3 \times (n+1)}{4}$$
+
+Com $n$ sendo o tamanho da amostra. Dessa forma, $X_{\left( P_i \right)}$ é o valor do $i$-ésimo quartil, onde $X_{\left( j \right)}$ representa a $j$-ésima observação dos dados ordenados.
+
+Se o cálculo da posição resultar em uma fração, deve-se fazer a média entre o valor que está na posição do inteiro anterior e do seguinte ao da posição.
+
+## Variância
+
+A variância é uma medida que avalia o quanto os dados estão dispersos em relação à média, em uma escala ao quadrado da escala dos dados.
+### Variância Populacional
+
+Para uma população, a variância é dada por:
+
+$$\sigma^2=\frac{\sum\limits_{i=1}^{N}\left(X_i - \mu\right)^2}{N}$$
+
+Com:
+
+-   $X_i =$ $i$-ésima observação da população
+
+-   $\mu =$ média populacional
+
+-   $N =$ tamanho da população
+
+### Variância Amostral
+
+Para uma amostra, a variância é dada por:
+
+$$S^2=\frac{\sum\limits_{i=1}^{n}\left(X_i - \bar{X}\right)^2}{n-1}$$
+
+Com:
+
+-   $X_i =$ i-ésima observação da amostra
+
+-   $\bar{X} =$ média amostral
+
+-   $n =$ tamanho da amostra
+
+## Desvio Padrão
+
+O desvio padrão é a raiz quadrada da variância. Ele avalia o quanto os dados estão dispersos em relação à média.
+
+### Desvio Padrão Populacional
+
+Para uma população, o desvio padrão é dado por:
+
+$$\sigma=\sqrt{\frac{\sum\limits_{i=1}^{N}\left(X_i - \mu\right)^2}{N}}$$
+
+Com:
+
+-   $X_i =$ i-ésima observação da população
+
+-   $\mu =$ média populacional
+
+-   $N =$ tamanho da população
+
+### Desvio Padrão Amostral
+
+Para uma amostra, o desvio padrão é dado por:
+
+$$S=\sqrt{\frac{\sum\limits_{i=1}^{n}\left(X_i - \bar{X}\right)^2}{n-1}}$$
+
+Com:
+
+-   $X_i =$ i-ésima observação da amostra
+
+-   $\bar{X} =$ média amostral
+
+-   $n =$ tamanho da amostra
+
+## Coeficiente de Variação
+
+O coeficiente de variação fornece a dispersão dos dados em relação à média. Quanto menor for o seu valor, mais homogêneos serão os dados. O coeficiente de variação é considerado baixo (apontando um conjunto de dados homogêneo) quando for menor ou igual a 25%. Ele é dado pela fórmula:
+
+$$C_V=\frac{S}{\bar{X}}\times 100$$
+
+Com:
+
+-   $S =$ desvio padrão amostral
+
+-   $\bar{X} =$ média amostral
+
+## Tipos de Variáveis
+
+### Qualitativas
+
+As variáveis qualitativas são as variáveis não numéricas, que representam categorias ou características da população. Estas subdividem-se em:
+
+-   **Nominais**: quando não existe uma ordem entre as categorias da variável (exemplos: sexo, cor dos olhos, fumante ou não, etc)
+-   **Ordinais**: quando existe uma ordem entre as categorias da variável (exemplos: nível de escolaridade, mês, estágio de doença, etc)
+
+### Quantitativas
+
+As variáveis quantitativas são as variáveis numéricas, que representam características numéricas da população, ou seja, quantidades. Estas subdividem-se em:
+
+-   **Discretas**: quando os possíveis valores são enumeráveis (exemplos: número de filhos, número de cigarros fumados, etc)
+-   **Contínuas**: quando os possíveis valores são resultado de medições (exemplos: massa, altura, tempo, etc)
+
+## Coeficiente de Correlação de Pearson
+
+O coeficiente de correlação de Pearson é uma medida que verifica o grau de relação linear entre duas variáveis quantitativas. Este coeficiente varia entre os valores -1 e 1. O valor zero significa que não há relação linear entre as variáveis. Quando o valor do coeficiente $r$ é negativo, diz-se existir uma relação de grandeza inversamente proporcional entre as variáveis. Analogamente, quando $r$ é positivo, diz-se que as duas variáveis são diretamente proporcionais.
+
+O coeficiente de correlação de Pearson é normalmente representado pela letra $r$ e a sua fórmula de cálculo é:
+
+$$
+r_{Pearson} = \frac{\displaystyle \sum_{i=1}^{n} \left [ \left(x_i-\bar{x}\right) \left(y_i-\bar{y}\right) \right]}{\sqrt{\displaystyle \sum_{i=1}^{n} x_i^2 - n\bar{x}^2}  \times \sqrt{\displaystyle \sum_{i=1}^{n} y_i^2 - n\bar{y}^2}}
+$$
+
+Onde:
+
+-   $x_i =$ i-ésimo valor da variável $X$
+-   $y_i =$ i-ésimo valor da variável $Y$
+-   $\bar{x} =$ média dos valores da variável $X$
+-   $\bar{y} =$ média dos valores da variável $Y$
+
+Vale ressaltar que o coeficiente de Pearson é paramétrico e, portanto, sensível quanto à normalidade (simetria) dos dados.
+
+## Qui-Quadrado
+
+A estatística Qui-Quadrado é uma medida de divergência entre a distribuição dos dados e uma distribuição esperada ou hipotética. Também pode ser usada para verificar independência ou associação entre variáveis categóricas. É calculada por:
+
+$$
+\chi^2 = \sum_{i=1}^{n} \frac{(O_i-E_i)^2}{E_i}
+$$
+
+Onde:
+
+-   $O_i =$ frequência observada
+-   $E_i =$ frequência esperada
+
+## Coeficiente de Contingência
+
+O coeficiente de contingência é derivado do Qui-Quadrado e ajusta seu valor para fornecer um referencial de comparação. Seu cálculo é:
+
+$$
+C=\sqrt{\frac{\chi^2}{\chi^2+n}}
+$$
+
+Onde:
+
+-   $\chi^2 =$ valor da estatística Qui-Quadrado
+-   $n =$ tamanho da amostra
+
+
 # Análises
 
 ## Análise acerca das situações de pobreza na sociedade
+
 
 
 
@@ -39,10 +222,7 @@ ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_pobrez
 ```
 
 
-
-A partir do $\ref{fig-Gráfico1}$, revela que a taxa média de pobreza no período foi de 8,3% da população brasileira, com variação entre 4% e 10%. A análise temporal mostra uma tendência de aumento de 0,124% ao ano, com picos significativos durante a crise econômica de 2015-2016 (+1,2 p.p. acima da média) e na pandemia de 2020-2021 (+0,9 p.p.). Padrões sazonais indicam maior incidência no primeiro semestre, possivelmente relacionada à sazonalidade do mercado de trabalho e ao ciclo agrícola. Comparando com outros indicadores, a pobreza geral apresenta:
-
-
+A partir do $\ref{fig-Gráfico1}$, revela que a taxa de pobreza no Brasil entre 2012 e 2022 revela um cenário de transformações significativas, marcado por quedas abruptas, períodos de estabilidade e tendências contraditórias recentes. Inicialmente, entre 2012 e 2014, a taxa manteve-se estável em torno de 10%, refletindo possivelmente os desafios econômicos do período. O ano de 2015 emergiu como um ponto de inflexão crucial, quando a pobreza caiu drasticamente para 7-8%, queda que pode estar associada a ajustes em políticas sociais ou econômicas. Nos anos subsequentes (2017-2021), os indicadores mostraram relativa estabilidade entre 6-7%, surpreendentemente sem grandes oscilações mesmo durante a pandemia de COVID-19 - um fenômeno que pode ser atribuído aos programas emergenciais de transferência de renda. Contudo, o ano de 2022 apresentou um paradoxo: enquanto a pobreza geral atingiu seu menor patamar histórico (4%), a extrema pobreza retornou aos níveis de 2012 (23%), sugerindo que as políticas sociais recentes foram mais eficazes no combate à pobreza moderada do que na erradicação da miséria. Essa trajetória indica que, apesar dos avanços, o país ainda enfrenta desafios estruturais no combate à desigualdade, com crises econômicas e inflação impactando de forma mais severa as camadas mais vulneráveis da população. Uma análise mais aprofundada, cruzando esses dados com indicadores macroeconômicos e detalhes sobre programas sociais, seria essencial para compreender plenamente essas dinâmicas.
 
 
 
@@ -64,7 +244,7 @@ ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_extrem
 
 
 
-A análise do $\ref{fig-Gráfico2}$, revela um cenário alarmante: em média, 21,5% da população brasileira viveu em extrema pobreza no período analisado, com picos que chegaram a 23% durante a crise econômica de 2015-2016. Diferentemente da pobreza geral, a extrema pobreza apresentou uma tendência de crescimento mais acentuado (0,248% ao ano), demonstrando maior vulnerabilidade aos ciclos econômicos. Estes resultados evidenciam que a extrema pobreza representa o estrato mais vulnerável da população, exigindo políticas públicas específicas e emergenciais. A persistência e crescimento deste indicador apontam para a necessidade urgente de reforço na rede de proteção social, com ações direcionadas aos grupos mais pobres e medidas anticíclicas para períodos de crise econômica.
+A análise do $\ref{fig-Gráfico2}$, revela um comportamento distinto e preocupante em comparação com a pobreza geral. Inicialmente, entre 2012 e 2014, a taxa manteve-se elevada, oscilando entre 22% e 23%, indicando uma persistente vulnerabilidade social. A partir de 2015, observa-se uma redução gradual, atingindo seu menor patamar em 2016 (18%), possivelmente influenciada por políticas sociais e ajustes econômicos. Contudo, ao contrário da pobreza geral que se manteve estável, a extrema pobreza apresentou uma tendência de crescimento lento, porém consistente, a partir de 2017, agravando-se significativamente em 2022, quando retornou aos níveis iniciais de 23%. Esse movimento sugere que, embora as políticas públicas tenham sido eficazes no combate à pobreza moderada, falharam em atacar as causas estruturais da miséria. A pandemia de COVID-19 não provocou um aumento imediato, graças aos programas emergenciais, mas o agravamento da crise econômica em 2022 parece ter impactado de forma mais severa justamente a população mais vulnerável. Esse cenário exige uma revisão urgente das estratégias de combate à extrema pobreza, com políticas mais focalizadas e estruturantes.
 
 
 
@@ -88,9 +268,10 @@ ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_vulner
 
 
 
-A análise do $\ref{fig-Gráfico3}$, revela que a vulnerabilidade social afetou em média 32.5% da população brasileira no período analisado, com picos de 33.3% durante a crise econômica (2015-16) e 33.1% na pandemia (2020-21). A tendência anual mostra redução de 0.124% ao ano (R²=0.15), indicando melhora gradual, porém lenta. Padrões sazonais significativos aparecem, com maiores taxas no 1º semestre (especialmente março-abril) e menores no 2º semestre (setembro-outubro), sugerindo sazonalidade relacionada a ciclos econômicos e agrícolas.
+A análise do $\ref{fig-Gráfico3}$, revela um padrão preocupante que combina elementos tanto da pobreza geral quanto da extrema pobreza. Inicialmente, entre 2012 e 2014, os índices se mantiveram elevados, variando entre 31% e 33%, refletindo uma situação estrutural de fragilidade social. O período entre 2015 e 2016 marcou uma significativa redução, com a taxa caindo para cerca de 25-28%, movimento que acompanhou a melhora nos indicadores de pobreza geral. Contudo, os anos seguintes (2017-2021) mostraram uma relativa estabilidade em patamares ainda altos (24-27%), demonstrando a resistência do problema mesmo durante a pandemia, quando políticas emergenciais evitaram um agravamento mais severo. O dado mais alarmante aparece em 2022, quando, apesar da redução da pobreza geral, a vulnerabilidade social manteve-se em níveis críticos, indicando que uma parcela significativa da população permanece em situação de risco, à beira da pobreza. Essa persistência revela a natureza estrutural da vulnerabilidade no país, que não é afetada apenas por flutuações econômicas conjunturais, mas por dinâmicas sociais mais profundas e persistentes. A análise sugere a necessidade de políticas públicas mais abrangentes e duradouras, que ataquem não apenas a pobreza atual, mas também as condições que mantêm milhões de brasileiros em permanente risco de exclusão social.
 
 
+## Análise acerca das situações das famílias
 
 
 ```{r echo=FALSE}
@@ -150,3 +331,32 @@ ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = familias_vulnerabi
 
 A análise do $\ref{fig-Gráfico6}$ mostra que O número de famílias vulneráveis apresentou flutuações significativas no período, iniciando em patamares elevados (18,1-18,7 milhões entre 2012-2014) e atingindo seu menor nível durante a pandemia (16,2-16,6 milhões em 2020), graças ao auxílio emergencial. Contudo, a partir de 2021 houve uma piora acentuada, superando 23 milhões em 2022 - o maior valor da série histórica. Esta trajetória revela que, enquanto políticas emergenciais mostraram eficácia temporária, a vulnerabilidade estrutural se agravou no longo prazo, com famílias saindo da pobreza apenas para entrar em situação de risco, exigindo abordagens preventivas mais efetivas. Os dados mostram ainda que crises econômicas (2015-2016) e sociais (2020-2022) funcionaram como aceleradores deste processo, evidenciando a necessidade de políticas sociais mais resilientes a choques externos.
 
+
+## Análise acompanhamento da situação dos indígenas em pobreza
+
+
+```{r}
+#| label: fig-Gráfico7
+#| fig-cap: "Gráfico de linhas Indígenas em situação de vulnerabilidade"
+
+ggplot(dados_pobreza, aes(x = data, y = indigenas_pobreza)) +
+  geom_line(color = "#041835", linewidth = 1) +
+  geom_point(colour = "#A11D21", size = 2) +
+  labs(title = "Evolução do número de indígenas em situação de pobreza",
+       x = "Ano",
+       y = "Número de famílias") +
+  theme_estat()
+
+  
+
+```
+
+
+A análise do $\ref{fig-Gráfico7}$ revela uma situação estruturalmente grave, com média mensal de 12.000 a 15.000 indígenas em pobreza ao longo da década, atingindo picos acima de 16.000. A análise temporal mostra pouca variação significativa, indicando que políticas sociais existentes tiveram impacto limitado e temporário nesta população. Os gráficos demonstram a persistência do problema, com valores consistentemente altos mesmo em períodos de expansão de programas sociais, sugerindo que as medidas atuais são insuficientes para superar as barreiras específicas enfrentadas pelas comunidades indígenas. Esta estabilidade nos altos patamares de pobreza evidencia a necessidade urgente de políticas públicas culturalmente adaptadas e territorializadas, que atuem nas causas profundas da vulnerabilidade indígena, combinando proteção social com promoção de autonomia econômica sustentável.
+
+
+# Conclusão
+
+A análise integrada dos indicadores de pobreza no período 2012-2022 revela um quadro complexo e multifacetado da vulnerabilidade social no Brasil, marcado por quatro dinâmicas principais. Primeiramente, observa-se uma redução relativa na pobreza geral (queda de 34%), contrastando com a persistência estrutural da pobreza indígena (12.000-15.000 indivíduos mensais) e o agravamento da extrema pobreza, que retornou em 2022 aos patamares de 2012 (23%), após atingir 19 milhões de famílias. Em segundo lugar, identificou-se um padrão cíclico de melhora temporária durante crises (como na pandemia, com o auxílio emergencial reduzindo a vulnerabilidade para 16,2 milhões), seguido de rápida deterioração pós-crise, culminando em recordes históricos em 2022 (23 milhões de vulneráveis).
+A terceira constatação revela uma perversa dinâmica de "transbordamento" social: enquanto políticas públicas lograram reduzir a pobreza moderada (de 5,4 para 3,5 milhões de famílias), fracassaram em conter tanto a migração para a vulnerabilidade (patamar estrutural de 24-27%) quanto o aprofundamento da miséria (extrema pobreza). Por fim, os dados expõem disparidades profundas - a pobreza indígena permaneceu inalterada, enquanto a geral flutuou - demonstrando a ineficiência das políticas universais para populações específicas.
+Esses achados demandam uma reorientação estratégica das políticas sociais baseada em três eixos: (1) intervenções territorializadas e culturalmente adaptadas, especialmente para povos originários; (2) mecanismos de proteção social resilientes a crises, com gatilhos automáticos durante choques; e (3) políticas estruturais que ataquem os determinantes da miséria (acesso à terra, educação contextualizada e empregos dignos). A persistência desses padrões após uma década comprova que apenas medidas combinadas - emergenciais e estruturais, universais e focalizadas - poderão romper o ciclo histórico da pobreza no país.
