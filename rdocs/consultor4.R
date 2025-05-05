@@ -303,7 +303,36 @@ ggplot(b2, aes(x = factor(ano), y = Indivíduos/1e6, fill = Categoria)) +
             position = position_stack(vjust = 0.5),
             size = 3, color = "#666666", fontface = "bold")
 
-##Quadro Análise 2 ##por algum motivo a tabela não roda no código, ele diz apresentar erro 
+##Quadro Análise 2 ##por algum motivo a tabela não roda no código, ele diz apresentar erro na linha
+
+\begin{table}[]
+\begin{tabular}{l}
+\textbackslash{}begin\{quadro\}{[}H{]}                                                                                                                                                                                           \\
+\textbackslash{}setlength\{\textbackslash{}tabcolsep\}\{9pt\}                                                                                                                                                                    \\
+\textbackslash{}renewcommand\{\textbackslash{}arraystretch\}\{1.20\}                                                                                                                                                             \\
+\textbackslash{}caption\{Medidas resumo das famílias em situação de pobreza, extrema pobreza e vulnerabilidade\}                                                                                                                 \\
+\textbackslash{}centering                                                                                                                                                                                                        \\
+\textbackslash{}begin\{adjustbox\}\{max width=\textbackslash{}textwidth\}                                                                                                                                                        \\
+\textbackslash{}begin\{tabular\}\{| l | S{[}table-format=7.0{]} | S{[}table-format=7.0{]} | S{[}table-format=7.0{]} |\}                                                                                                          \\
+\textbackslash{}hline                                                                                                                                                                                                            \\
+\textbackslash{}textbf\{Estatística\} \& \textbackslash{}textbf\{Famílias Pobreza\} \& \textbackslash{}textbf\{Famílias Extrema Pobreza\} \& \textbackslash{}textbf\{Famílias Vulnerabilidade\} \textbackslash{}\textbackslash{} \\
+\textbackslash{}hline                                                                                                                                                                                                            \\
+Média \& 3.842.206 \& 13.704.797 \& 18.547.003 \textbackslash{}\textbackslash{}                                                                                                                                                  \\
+Desvio Padrão \& 1.023.145 \& 2.876.421 \& 3.899.566 \textbackslash{}\textbackslash{}                                                                                                                                            \\
+Variância \& 1.046.826.058.081 \& 8.273.797.789.284 \& 15.206.615.718.489 \textbackslash{}\textbackslash{}                                                                                                                       \\
+Mínimo \& 2.746.503 \& 11.827.568 \& 15.569.214 \textbackslash{}\textbackslash{}                                                                                                                                                 \\
+1º Quartil \& 3.193.758 \& 12.347.966 \& 16.541.724 \textbackslash{}\textbackslash{}                                                                                                                                             \\
+Mediana \& 3.863.976 \& 13.164.979 \& 17.028.925 \textbackslash{}\textbackslash{}                                                                                                                                                \\
+3º Quartil \& 4.406.201 \& 14.795.038 \& 19.934.236 \textbackslash{}\textbackslash{}                                                                                                                                             \\
+Máximo \& 5.315.757 \& 19.820.117 \& 23.924.331 \textbackslash{}\textbackslash{}                                                                                                                                                 \\
+\textbackslash{}hline                                                                                                                                                                                                            \\
+\textbackslash{}end\{tabular\}                                                                                                                                                                                                   \\
+\textbackslash{}label\{quad:quadro\_resumo\_familias\}                                                                                                                                                                           \\
+\textbackslash{}end\{adjustbox\}                                                                                                                                                                                                 \\
+\textbackslash{}end\{quadro\}                                                                                                                                                                                                   
+\end{tabular}
+\end{table}
+
 
 #Análise 3
 
