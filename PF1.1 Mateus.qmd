@@ -9,7 +9,12 @@ source("rdocs/consultor4.R")
 
 # Introdução
 
-Essa análise tem por objetivo observar a evolução das taxas dos índices de situação de pobreza e foi realizada utilizando-se dos números colhidos afim de demonsntrar a situação em que se encontra a população Brasileira no período entre 2012 e 2022, a seguir iremos dar ênfase nos pontos propostos e apresentar os resultados encontrados em nossas análises.
+O seguinte projeto tem como objetivo analisar o comportamento da população em situação de vulnerabilidade social no Brasil, com foco em identificar padrões, diferenças e possíveis relações entre os diferentes grupos. Foram realizadas três análises: evolução das taxas dos índices de situação de pobreza; observação da distribuição dos tipos de pobreza nas famílias; se a população em situação de pobreza entre o grupo indígena acompanhou a tendência geral. Para isso, foram utilizadas análises descritivas e correlação. 
+
+O banco de dados utilizado foi fornecido pelo cliente e contém informações relacionadas à população em situação de vulnerabilidade social no Brasil, no período de 2012 a 2022. As variáveis presentes no banco representam a quantidade de indivíduos em situação de pobreza, extrema pobreza e o total de pessoas em vulnerabilidade, além de porcentagens dessas variáveis em relação à população estimada e variáveis específicas para famílias, indígenas, quilombolas e ciganos. Não foi informado se a amostra é probabilística, logo, o estudo seguiu com base nas informações fornecidas.
+
+ O software utilizado para as análises e para a construção do relatório foi o R, versão4.4.3 (2025-02-28 ucrt), por meio do ambiente de desenvolvimento RStudio.2
+
 
 # Referencial Teórico
 ## Média
@@ -197,7 +202,7 @@ Onde:
 
 
 
-Essa análise tem por objetivo observar a evolução das taxas dos índices de situação de pobreza e foi realizada utilizando-se dos números colhidos afim de demonsntrar a situação em que se encontra a população Brasileira no período entre 2012 e 2022, a seguir iremos dar ênfase nos pontos propostos e apresentar os resultados encontrados em nossas análises.
+Essa análise tem por objetivo observar a evolução das taxas dos índices de situação de pobreza e foi realizada utilizando-se dos números colhidos afim de demonstrar a situação em que se encontra a população Brasileira no período entre 2012 e 2022, a seguir iremos dar ênfase nos pontos propostos e apresentar os resultados encontrados em nossas análises; as variáveis utilizadas foram as seguintes: porcentagem pobreza; porcentagem extrema pobreza; porcentagem vulnerabilidade, que são variáveis quantitativas contínuas e a variável ano, que é uma variável quantitativa discreta.
 
 
 
@@ -210,153 +215,92 @@ Essa análise tem por objetivo observar a evolução das taxas dos índices de s
 #| label: fig-Gráfico1
 #| fig-cap: "Gráfico de linhas porcentagem de pobreza por ano"
 
-ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_pobreza)) +
-  geom_line(color = "#003366", linewidth = 1.2) +
-  geom_point(colour = "#A11D21", size = 2) +
-  labs(title = "Evolução da Taxa de Pobreza no Brasil",
-       x = "Ano",
-       y = "Taxa de Pobreza (%)") +
-  theme_estat()
+ggplot(dados_anual, aes(x = ano, y = porcentagem, color = tipo)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 3) +
+  scale_colour_manual(name = "Indicador", labels = c("Extrema Pobreza", "Pobreza", "Vulnerabilidade")) +
+  labs(x = "Ano", y = "Porcentagem da População") +
+  theme_estat() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5)) +
+  scale_x_continuous(breaks = seq(2012, 2022, by = 1)) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1))
   
 
 ```
 
 
-A partir do $\ref{fig-Gráfico1}$, revela que a taxa de pobreza no Brasil entre 2012 e 2022 revela um cenário de transformações significativas, marcado por quedas abruptas, períodos de estabilidade e tendências contraditórias recentes. Inicialmente, entre 2012 e 2014, a taxa manteve-se estável em torno de 10%, refletindo possivelmente os desafios econômicos do período. O ano de 2015 emergiu como um ponto de inflexão crucial, quando a pobreza caiu drasticamente para 7-8%, queda que pode estar associada a ajustes em políticas sociais ou econômicas. Nos anos subsequentes (2017-2021), os indicadores mostraram relativa estabilidade entre 6-7%, surpreendentemente sem grandes oscilações mesmo durante a pandemia de COVID-19 - um fenômeno que pode ser atribuído aos programas emergenciais de transferência de renda. Contudo, o ano de 2022 apresentou um paradoxo: enquanto a pobreza geral atingiu seu menor patamar histórico (4%), a extrema pobreza retornou aos níveis de 2012 (23%), sugerindo que as políticas sociais recentes foram mais eficazes no combate à pobreza moderada do que na erradicação da miséria. Essa trajetória indica que, apesar dos avanços, o país ainda enfrenta desafios estruturais no combate à desigualdade, com crises econômicas e inflação impactando de forma mais severa as camadas mais vulneráveis da população. Uma análise mais aprofundada, cruzando esses dados com indicadores macroeconômicos e detalhes sobre programas sociais, seria essencial para compreender plenamente essas dinâmicas.
+A partir do $\ref{fig-Gráfico1}$, revela que comparando pobreza, extrema pobreza e vulnerabilidade revela tendências distintas ao longo da década (2012-2022). A pobreza geral (linha azul) apresentou uma trajetória de queda gradual, saindo de aproximadamente 10% em 2012 para 4% em 2022, indicando um avanço nas políticas de redução da pobreza moderada. Em contraste, a extrema pobreza (linha vermelha) mostrou maior volatilidade: após oscilações entre 22-23% no início da década, caiu para 18% em 2016, mas retornou aos patamares iniciais em 2022 (23%), evidenciando a persistência estrutural da miséria. Já a vulnerabilidade social (linha amarela) manteve-se em patamares elevados (24-33%), com redução temporária durante a pandemia (2020-2021), seguida de recuperação rápida, sugerindo que famílias saíram da pobreza apenas para entrar em risco social.
 
 
 
-
-
-```{r echo=FALSE}
-#| label: fig-Gráfico2
-#| fig-cap: "Gráfico de linhas porcentagem de extrema pobreza por ano"
-
-ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_extrema_pobreza)) +
-  geom_line(color = "#A11D21", linewidth = 1.2) +
-  geom_point(colour = "#008091", size = 2) +
-  labs(title = "Evolução da Taxa de Extrema Pobreza no Brasil",
-       x = "Ano",
-       y = "Taxa de Extrema Pobreza (%)") +
-  theme_estat()
-
-```
-
-
-
-A análise do $\ref{fig-Gráfico2}$, revela um comportamento distinto e preocupante em comparação com a pobreza geral. Inicialmente, entre 2012 e 2014, a taxa manteve-se elevada, oscilando entre 22% e 23%, indicando uma persistente vulnerabilidade social. A partir de 2015, observa-se uma redução gradual, atingindo seu menor patamar em 2016 (18%), possivelmente influenciada por políticas sociais e ajustes econômicos. Contudo, ao contrário da pobreza geral que se manteve estável, a extrema pobreza apresentou uma tendência de crescimento lento, porém consistente, a partir de 2017, agravando-se significativamente em 2022, quando retornou aos níveis iniciais de 23%. Esse movimento sugere que, embora as políticas públicas tenham sido eficazes no combate à pobreza moderada, falharam em atacar as causas estruturais da miséria. A pandemia de COVID-19 não provocou um aumento imediato, graças aos programas emergenciais, mas o agravamento da crise econômica em 2022 parece ter impactado de forma mais severa justamente a população mais vulnerável. Esse cenário exige uma revisão urgente das estratégias de combate à extrema pobreza, com políticas mais focalizadas e estruturantes.
-
-
-
-
-
-
-
-```{r echo=FALSE}
-#| label: fig-Gráfico3
-#| fig-cap: "Gráfico de linhas porcentagem de vulnerabilidade por ano"
-
-ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_vulnerabilidade)) +
-  geom_line(color = "#008091", linewidth = 1.2) +
-  geom_point(colour = "#663333", size = 2) +
-  labs(title = "Evolução de Vulnerabilidade no Brasil",
-       x = "Ano",
-       y = "Taxa de Vulnerabilidade (%)") +
-  theme_estat()
-
-```
-
-
-
-A análise do $\ref{fig-Gráfico3}$, revela um padrão preocupante que combina elementos tanto da pobreza geral quanto da extrema pobreza. Inicialmente, entre 2012 e 2014, os índices se mantiveram elevados, variando entre 31% e 33%, refletindo uma situação estrutural de fragilidade social. O período entre 2015 e 2016 marcou uma significativa redução, com a taxa caindo para cerca de 25-28%, movimento que acompanhou a melhora nos indicadores de pobreza geral. Contudo, os anos seguintes (2017-2021) mostraram uma relativa estabilidade em patamares ainda altos (24-27%), demonstrando a resistência do problema mesmo durante a pandemia, quando políticas emergenciais evitaram um agravamento mais severo. O dado mais alarmante aparece em 2022, quando, apesar da redução da pobreza geral, a vulnerabilidade social manteve-se em níveis críticos, indicando que uma parcela significativa da população permanece em situação de risco, à beira da pobreza. Essa persistência revela a natureza estrutural da vulnerabilidade no país, que não é afetada apenas por flutuações econômicas conjunturais, mas por dinâmicas sociais mais profundas e persistentes. A análise sugere a necessidade de políticas públicas mais abrangentes e duradouras, que ataquem não apenas a pobreza atual, mas também as condições que mantêm milhões de brasileiros em permanente risco de exclusão social.
 
 
 ## Análise acerca das situações das famílias
 
 
-```{r echo=FALSE}
-#| label: fig-Gráfico4
-#| fig-cap: "Gráfico de linhas famílias em situação de pobreza por ano"
-
-ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = familias_pobreza)) +
-  geom_line(color = "#008091", linewidth = 1) +
-  geom_point(colour = "#A11D21", size = 2) +
-  labs(title = "Evolução do número de famílias em pobreza",
-       x = "Ano",
-       y = "Número de famílias") +
-  theme_estat()
-  
-
-```
-
-
-A análise do $\ref{fig-Gráfico4}$ permite observar que entre agosto de 2012 e setembro de 2022, o número de famílias em situação de pobreza no Brasil apresentou variações significativas, influenciadas por fatores econômicos e políticas públicas. No início do período (2012-2014), os valores se mantiveram estáveis entre 5,2 e 5,4 milhões de famílias, com leve queda em 2014. Durante a crise econômica (2015-2017), houve redução acentuada para cerca de 4 milhões em 2016, refletindo os impactos da recessão, enquanto a pandemia de COVID-19 (2020) trouxe uma queda temporária para 2,8-3 milhões de famílias, graças ao auxílio emergencial. No entanto, a partir de 2021, os números voltaram a subir (3-3,5 milhões), pressionados pelo fim dos benefícios e pela inflação. Apesar da redução de aproximadamente 34% ao longo da década, a persistência de patamares elevados após 2022 revela desafios estruturais, como desigualdade e mercado de trabalho fragilizado, destacando a sensibilidade desse indicador a crises e intervenções governamentais. 
+### Essa análise tem por objetivo observar a situação dos tipos de pobreza nas famílias e foi realizada utilizando-se dos números colhidos afim de demonstrar a situação em que se encontra a população Brasileira no período entre 2012 e 2022, a seguir iremos dar ênfase nos pontos propostos e apresentar os resultados encontrados em nossas análises; as variáveis utilizadas foram as seguintes: familias pobreza; familias extrema pobreza; familias vulnerabilidade, que são variáveis quantitativas contínuas, a variável ano, que é uma variável quantitativa discreta e a variável categoria, uma variável qualitativa nominal.
 
 
 ```{r echo=FALSE}
-#| label: fig-Gráfico5
-#| fig-cap: "Gráfico de linhas famílias em situação de extrema pobreza por ano"
+#| label: fig-Gráfico2
+#| fig-cap: "Gráfico de barras acerca do número de famílias e suas situações econômicas"
 
-ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = familias_extrema_pobreza)) +
-  geom_line(color = "#003366", linewidth = 1) +
-  geom_point(colour = "#FF6600", size = 2) +
-  labs(title = "Evolução do número de famílias em extrema pobreza",
-       x = "Ano",
-       y = "Número de famílias") +
-  theme_estat()
+ggplot(b2, aes(x = factor(ano), y = Indivíduos/1e6, fill = Categoria)) +
+  geom_bar(stat = "identity", position = "stack") +
+  scale_fill_manual(name = "Famílias") +
+  labs(x = "Ano", y = "Número de Indivíduos (milhões)") +
+  theme_estat() +
+  theme(legend.position = "top",
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(labels = label_number(suffix = "M")) +
+  geom_text(aes(label = ifelse(Indivíduos/1e6 > 10, round(Indivíduos/1e6, 1), "")),
+            position = position_stack(vjust = 0.5),
+            size = 3, color = "#666666", fontface = "bold")
   
 
 ```
 
 
-a análise do $\ref{fig-Gráfico5}$ mostra que O número de famílias em extrema pobreza (familias_extrema_pobreza) apresentou uma trajetória mais volátil e preocupante do que a pobreza geral no período analisado (agosto/2012 a setembro/2022). Entre 2012 e 2014, os valores se mantiveram elevados, oscilando entre 12,8 e 14 milhões de famílias, com picos em 2014, possivelmente associados ao agravamento da crise econômica pré-recessão. A partir de 2015, houve um crescimento acentuado, atingindo 14-15 milhões de famílias em 2016-2017, refletindo os efeitos da recessão e do desemprego, que empurraram mais famílias para a pobreza extrema. Durante a pandemia (2020), houve uma redução temporária (para 13-14 milhões), explicada pela expansão do auxílio emergencial, mas os números voltaram a subir drasticamente em 2021-2022, ultrapassando 19 milhões de famílias em meados de 2022 – o maior patamar da série histórica –, impulsionados pelo fim dos benefícios, inflação e crise social pós-pandemia. Essa trajetória ascendente contrasta com a redução na pobreza moderada, sugerindo um aprofundamento da desigualdade, em que as famílias mais vulneráveis migraram para condições ainda mais críticas. A análise revela que, diferentemente da pobreza geral, a extrema pobreza não apresentou melhora estrutural na década, com agravamento recente, exigindo políticas públicas direcionadas a esse grupo específico.
+A análise do $\ref{fig-Gráfico2}$ permite observar que a distribuição absoluta dos indivíduos nas três categorias de pobreza ao longo de uma década (2012–2022). A extrema pobreza (vermelho) mostra a maior volatilidade: após atingir picos próximos a 45 milhões de pessoas em 2014–2015, reduziu-se para 37 milhões em 2020 (efeito do auxílio emergencial), mas retornou a patamares críticos em 2022. Os vulneráveis (amarelo) representam o grupo mais numeroso, com 60–70 milhões de indivíduos, indicando uma população constantemente à beira da pobreza. Já os pobres (azul) mantiveram-se entre 10 e 20 milhões, com queda acentuada em 2020, mas sem recuperação significativa pós-pandemia.
+
+
+
+
+
+### Essa análise tem por objetivo acompanhar a evolução entre a taxa de indígenas em pobreza com relação à população total e foi realizada utilizando-se dos números colhidos afim de demonstrar a situação em que se encontra a população Brasileira no período entre 2012 e 2022, a seguir iremos dar ênfase nos pontos propostos e apresentar os resultados encontrados em nossas análises; as variáveis utilizadas foram as seguintes: pobreza, que é uma variável quantitativa contínua; indigenas pobreza, que é uma variável quantitativas discreta, e ambas são variáveis de razão. 
 
 
 ```{r echo=FALSE}
-#| label: fig-Gráfico6
-#| fig-cap: "Gráfico de linhas famílias em situação de vulnerabilidade"
+#| label: fig-Gráfico3
+#| fig-cap: "Gráfico de dispersão acerca da relação entre pobreza geral e pobreza entre indígenas"
 
-ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = familias_vulnerabilidade)) +
-  geom_line(color = "#041835", linewidth = 1) +
-  geom_point(colour = "#A11D21", size = 2) +
-  labs(title = "Evolução do número de famílias em vulnerabilidade",
-       x = "Ano",
-       y = "Número de famílias") +
+ggplot(b3, aes(x = proporcao_pobreza_geral, y = proporcao_pobreza_indigena)) +
+  geom_jitter(colour = "#A11D21", size = 3) +
+  labs(
+    x = "Pobreza na população geral (proporção)",
+    y = "Pobreza entre indígenas"
+  ) +
+  geom_smooth(method = "lm", se = FALSE, COLOR = "blue")+
   theme_estat()
-
   
 
 ```
 
 
-A análise do $\ref{fig-Gráfico6}$ mostra que O número de famílias vulneráveis apresentou flutuações significativas no período, iniciando em patamares elevados (18,1-18,7 milhões entre 2012-2014) e atingindo seu menor nível durante a pandemia (16,2-16,6 milhões em 2020), graças ao auxílio emergencial. Contudo, a partir de 2021 houve uma piora acentuada, superando 23 milhões em 2022 - o maior valor da série histórica. Esta trajetória revela que, enquanto políticas emergenciais mostraram eficácia temporária, a vulnerabilidade estrutural se agravou no longo prazo, com famílias saindo da pobreza apenas para entrar em situação de risco, exigindo abordagens preventivas mais efetivas. Os dados mostram ainda que crises econômicas (2015-2016) e sociais (2020-2022) funcionaram como aceleradores deste processo, evidenciando a necessidade de políticas sociais mais resilientes a choques externos.
+A análise do $\ref{fig-Gráfico3}$ mostra uma relação diretamente proporcional entre os níveis de pobreza geral e indígena no Brasil, onde o aumento da pobreza na população em geral corresponde sistematicamente a índices ainda mais elevados entre os povos indígenas, evidenciando uma desigualdade estrutural persistente. Enquanto a pobreza geral apresentou uma redução de aproximadamente 47% no período analisado (caindo de 19,7 milhões para 8,4 milhões de pessoas), a queda entre a população indígena foi significativamente menor (27%, de 16,6 mil para 12,1 mil), demonstrando que as políticas universais de combate à pobreza têm impacto limitado nessas comunidades. A linha de tendência linear confirma essa correlação positiva, mas também destaca que mesmo nos períodos de menor pobreza geral, os indígenas permanecem em situação desproporcionalmente vulnerável, com valores consistentemente acima da média nacional. Essa análise aponta para a necessidade urgente de políticas públicas específicas e territorializadas que considerem as particularidades culturais e socioeconômicas dos povos originários, já que os mecanismos gerais de redistribuição de renda se mostram insuficientes para reduzir efetivamente as disparidades históricas que afetam essas populações.
 
 
-## Análise acompanhamento da situação dos indígenas em pobreza
 
-
-```{r}
-#| label: fig-Gráfico7
-#| fig-cap: "Gráfico de linhas Indígenas em situação de vulnerabilidade"
-
-ggplot(dados_pobreza, aes(x = data, y = indigenas_pobreza)) +
-  geom_line(color = "#041835", linewidth = 1) +
-  geom_point(colour = "#A11D21", size = 2) +
-  labs(title = "Evolução do número de indígenas em situação de pobreza",
-       x = "Ano",
-       y = "Número de famílias") +
-  theme_estat()
-
-  
-
-```
-
-
-A análise do $\ref{fig-Gráfico7}$ revela uma situação estruturalmente grave, com média mensal de 12.000 a 15.000 indígenas em pobreza ao longo da década, atingindo picos acima de 16.000. A análise temporal mostra pouca variação significativa, indicando que políticas sociais existentes tiveram impacto limitado e temporário nesta população. Os gráficos demonstram a persistência do problema, com valores consistentemente altos mesmo em períodos de expansão de programas sociais, sugerindo que as medidas atuais são insuficientes para superar as barreiras específicas enfrentadas pelas comunidades indígenas. Esta estabilidade nos altos patamares de pobreza evidencia a necessidade urgente de políticas públicas culturalmente adaptadas e territorializadas, que atuem nas causas profundas da vulnerabilidade indígena, combinando proteção social com promoção de autonomia econômica sustentável.
 
 
 # Conclusão
 
-A análise integrada dos indicadores de pobreza no período 2012-2022 revela um quadro complexo e multifacetado da vulnerabilidade social no Brasil, marcado por quatro dinâmicas principais. Primeiramente, observa-se uma redução relativa na pobreza geral (queda de 34%), contrastando com a persistência estrutural da pobreza indígena (12.000-15.000 indivíduos mensais) e o agravamento da extrema pobreza, que retornou em 2022 aos patamares de 2012 (23%), após atingir 19 milhões de famílias. Em segundo lugar, identificou-se um padrão cíclico de melhora temporária durante crises (como na pandemia, com o auxílio emergencial reduzindo a vulnerabilidade para 16,2 milhões), seguido de rápida deterioração pós-crise, culminando em recordes históricos em 2022 (23 milhões de vulneráveis).
-A terceira constatação revela uma perversa dinâmica de "transbordamento" social: enquanto políticas públicas lograram reduzir a pobreza moderada (de 5,4 para 3,5 milhões de famílias), fracassaram em conter tanto a migração para a vulnerabilidade (patamar estrutural de 24-27%) quanto o aprofundamento da miséria (extrema pobreza). Por fim, os dados expõem disparidades profundas - a pobreza indígena permaneceu inalterada, enquanto a geral flutuou - demonstrando a ineficiência das políticas universais para populações específicas.
-Esses achados demandam uma reorientação estratégica das políticas sociais baseada em três eixos: (1) intervenções territorializadas e culturalmente adaptadas, especialmente para povos originários; (2) mecanismos de proteção social resilientes a crises, com gatilhos automáticos durante choques; e (3) políticas estruturais que ataquem os determinantes da miséria (acesso à terra, educação contextualizada e empregos dignos). A persistência desses padrões após uma década comprova que apenas medidas combinadas - emergenciais e estruturais, universais e focalizadas - poderão romper o ciclo histórico da pobreza no país.
+A análise da evolução das taxas de pobreza, extrema pobreza e vulnerabilidade ao longo da década revela padrões distintos. Enquanto a pobreza geral apresentou uma trajetória de declínio consistente (de 10% para 4%), refletindo avanços nas políticas sociais, a extrema pobreza demonstrou maior resistência, retornando em 2022 aos patamares críticos de 2012 (23%). Já a vulnerabilidade social manteve-se persistentemente alta (24-33%), com apenas quedas temporárias durante a pandemia, indicando que muitas famílias permanecem em situação de risco, mesmo quando superam a linha da pobreza. Esses resultados sugerem que, embora as políticas universais tenham sido eficazes para reduzir a pobreza moderada, falharam em combater as causas estruturais da miséria e da insegurança socioeconômica.
+
+A análise em números absolutos destaca a escala do desafio: a extrema pobreza afetou entre 37 e 45 milhões de pessoas, com volatilidade acentuada, especialmente durante crises econômicas. O grupo vulnerável, por sua vez, representou a maior parcela da população (60-70 milhões), mostrando que uma parte significativa dos brasileiros vive em situação de precariedade, mesmo sem estar tecnicamente abaixo da linha da pobreza. A pobreza geral, embora menor em magnitude (10-20 milhões), revelou-se mais estável, com quedas pontuais durante períodos de expansão de programas sociais. Esses dados reforçam a necessidade de políticas que não apenas aliviem a pobreza imediata, mas também reduzam a vulnerabilidade crônica.
+
+
+A análise comparativa entre a pobreza geral e a indígena expõe disparidades profundas e persistentes. Enquanto a pobreza nacional caiu 47%, a redução entre os povos indígenas foi significativamente menor (27%), e seus índices permaneceram consistentemente acima da média nacional. Essa desigualdade estrutural revela a insuficiência das políticas universais para atender às necessidades específicas dessas comunidades. A correlação positiva entre os indicadores sugere que melhorias na população geral beneficiam os indígenas, mas em proporção insuficiente. Portanto, é urgente implementar políticas territorializadas, que considerem as particularidades culturais e socioeconômicas dos povos originários, para romper o ciclo histórico de exclusão que os mantém em situação de vulnerabilidade desproporcional.

@@ -26,6 +26,8 @@ source("rdocs/source/packages.R")
 
 # Análise 1
 ## Evolução dos índices de pobreza
+##BANCOS
+
 dados <- read_csv("indices_pobreza_consolidado.csv")
 dados_pobreza <- dados %>%
   mutate(
@@ -38,6 +40,80 @@ dados_pobreza <- dados %>%
   ) %>%
   arrange(data)
 
+dados_anual <- dados_pobreza %>%
+  mutate(ano = year(ymd(paste0(periodo, "01")))) %>%
+  group_by(ano) %>%
+  summarise(
+    pobreza = mean(porcentagem_pobreza, na.rm = TRUE),
+    extrema_pobreza = mean(porcentagem_extrema_pobreza, na.rm = TRUE),
+    vulnerabilidade = mean(porcentagem_vulnerabilidade, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = -ano, names_to = "tipo", values_to = "porcentagem")
+
+
+b2<- dados_pobreza %>%
+  mutate(
+    data = ymd(paste0(periodo, "01")),  
+    ano = year(data)                     
+  ) %>%
+  select(
+    data,
+    ano,
+    familias_pobreza,
+    familias_extrema_pobreza,
+    familias_vulnerabilidade
+  ) %>%
+  arrange(data)
+
+b2 <- dados_pobreza %>%
+  mutate(
+    data = ymd(paste0(periodo, "01")),
+    ano = year(data),
+    Pobres = populacao_estimada * (porcentagem_pobreza/100),
+    `Extrema Pobreza` = populacao_estimada * (porcentagem_extrema_pobreza/100),
+    Vulneráveis = populacao_estimada * (porcentagem_vulnerabilidade/100)
+  ) %>%
+  group_by(ano) %>%
+  summarise(
+    Pobres = mean(Pobres),
+    `Extrema Pobreza` = mean(`Extrema Pobreza`),
+    Vulneráveis = mean(Vulneráveis)
+  ) %>%
+  pivot_longer(cols = -ano, names_to = "Categoria", values_to = "Indivíduos")
+
+b3 <- dados_pobreza %>%
+  mutate(
+    data = ymd(paste0(periodo, "01")),
+    total_populacao = total,
+    total_indigenas = indigenas_pobreza + indigenas_extrema_pobreza + indigenas_vulnerabilidade,
+    proporcao_pobreza_geral = pobreza / total_populacao,
+    proporcao_pobreza_indigena = indigenas_pobreza / total_indigenas,
+    diferenca_absoluta = proporcao_pobreza_indigena - proporcao_pobreza_geral,
+    diferenca_relativa = diferenca_absoluta / proporcao_pobreza_geral - 1
+  ) %>%
+  select(
+    data,
+    periodo,
+    total_populacao,
+    total_indigenas,
+    pobreza,
+    indigenas_pobreza,
+    proporcao_pobreza_geral,
+    proporcao_pobreza_indigena,
+    diferenca_absoluta,
+    diferenca_relativa
+  ) %>%
+  arrange(data)
+
+b3_longo <- b3 %>%
+  select(data, proporcao_pobreza_geral, proporcao_pobreza_indigena) %>%
+  pivot_longer(cols = -data, 
+               names_to = "tipo_pobreza", 
+               values_to = "proporcao") %>%
+  mutate(tipo_pobreza = case_when(
+    tipo_pobreza == "proporcao_pobreza_geral" ~ "Geral",
+    tipo_pobreza == "proporcao_pobreza_indigena" ~ "Indígena"
+  ))
 
 
 estatisticas_pobreza <- dados_pobreza %>%
@@ -52,9 +128,13 @@ estatisticas_pobreza <- dados_pobreza %>%
 
 print(estatisticas_pobreza)
 
-
+library(tidyverse)
 library(ggplot2)
 library(scales)
+
+
+#------------------------------------------
+
 
 ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_pobreza)) +
   geom_line(color = "#003366", linewidth = 1.2) +
@@ -69,6 +149,7 @@ ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_pobrez
   theme_estat() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         plot.title = element_text(size = 14, face = "bold"))
+
 
 #análise 1.2
 
@@ -114,13 +195,16 @@ ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_vulner
 
 #Análise 1.1 refeita no padrão
 
-ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_pobreza)) +
-  geom_line(color = "#003366", linewidth = 1.2) +
-  geom_point(colour = "#A11D21", size = 2) +
-  labs(title = "Evolução da Taxa de Pobreza no Brasil",
-       x = "Ano",
-       y = "Taxa de Pobreza (%)") +
-  theme_estat()
+ggplot(dados_anual, aes(x = ano, y = porcentagem, color = tipo)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 3) +
+  scale_colour_manual(name = "Indicador", labels = c("Extrema Pobreza", "Pobreza", "Vulnerabilidade")) +
+  labs(x = "Ano", y = "Porcentagem da População") +
+  theme_estat() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5)) +
+  scale_x_continuous(breaks = seq(2012, 2022, by = 1)) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1))
 
 #Análise 1.2 refeita no padrão
 
@@ -184,4 +268,50 @@ ggplot(dados_pobreza, aes(x = data, y = indigenas_pobreza)) +
   labs(title = "Evolução do número de indígenas em situação de pobreza",
        x = "Ano",
        y = "Número de famílias") +
+  theme_estat()
+
+
+
+##Correção Final
+
+##Análise 1 
+
+ggplot(dados_anual, aes(x = ano, y = porcentagem, color = tipo)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 3) +
+  scale_colour_manual(name = "Indicador", labels = c("Extrema Pobreza", "Pobreza", "Vulnerabilidade")) +
+  labs(x = "Ano", y = "Porcentagem da População") +
+  theme_estat() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5)) +
+  scale_x_continuous(breaks = seq(2012, 2022, by = 1)) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1))
+
+##Análise 2
+
+ggplot(b2, aes(x = factor(ano), y = Indivíduos/1e6, fill = Categoria)) +
+  geom_bar(stat = "identity", position = "stack") +
+  scale_fill_manual(name = "Famílias") +
+  labs(x = "Ano", y = "Número de Indivíduos (milhões)") +
+  theme_estat() +
+  theme(legend.position = "top",
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(labels = label_number(suffix = "M")) +
+  geom_text(aes(label = ifelse(Indivíduos/1e6 > 10, round(Indivíduos/1e6, 1), "")),
+            position = position_stack(vjust = 0.5),
+            size = 3, color = "#666666", fontface = "bold")
+
+##Quadro Análise 2 ##por algum motivo a tabela não roda no código, ele diz apresentar erro 
+
+#Análise 3
+
+ggplot(b3, aes(x = proporcao_pobreza_geral, y = proporcao_pobreza_indigena)) +
+  geom_jitter(colour = "#A11D21", size = 3) +
+  labs(
+    x = "Pobreza na população geral (proporção)",
+    y = "Pobreza entre indígenas"
+  ) +
+  geom_smooth(method = "lm", se = FALSE, COLOR = "blue")+
   theme_estat()
