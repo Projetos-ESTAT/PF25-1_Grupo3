@@ -44,11 +44,11 @@ dados_anual <- dados_pobreza %>%
   mutate(ano = year(ymd(paste0(periodo, "01")))) %>%
   group_by(ano) %>%
   summarise(
-    pobreza = mean(porcentagem_pobreza, na.rm = TRUE),
-    extrema_pobreza = mean(porcentagem_extrema_pobreza, na.rm = TRUE),
-    vulnerabilidade = mean(porcentagem_vulnerabilidade, na.rm = TRUE)
+    Pobreza = mean(porcentagem_pobreza, na.rm = TRUE),
+    `Extrema pobreza` = mean(porcentagem_extrema_pobreza, na.rm = TRUE),
+    Vulnerabilidade = mean(porcentagem_vulnerabilidade, na.rm = TRUE)
   ) %>%
-  pivot_longer(cols = -ano, names_to = "tipo", values_to = "porcentagem")
+  pivot_longer(cols = -ano, names_to = "Classe", values_to = "escala")
 
 
 b2<- dados_pobreza %>%
@@ -75,9 +75,9 @@ b2 <- dados_pobreza %>%
   ) %>%
   group_by(ano) %>%
   summarise(
-    Pobres = mean(Pobres),
+    Pobreza = mean(Pobres),
     `Extrema Pobreza` = mean(`Extrema Pobreza`),
-    Vulneráveis = mean(Vulneráveis)
+    Vulnerabilidade = mean(Vulneráveis)
   ) %>%
   pivot_longer(cols = -ano, names_to = "Categoria", values_to = "Indivíduos")
 
@@ -195,14 +195,13 @@ ggplot(dados_pobreza, aes(x = ymd(paste0(periodo, "01")), y = porcentagem_vulner
 
 #Análise 1.1 refeita no padrão
 
-ggplot(dados_anual, aes(x = ano, y = porcentagem, color = tipo)) +
+ggplot(dados_anual, aes(x = ano, y = escala, color = Classe)) +
   geom_line(size = 1.2) +
   geom_point(size = 3) +
   scale_colour_manual(name = "Indicador", labels = c("Extrema Pobreza", "Pobreza", "Vulnerabilidade")) +
-  labs(x = "Ano", y = "Porcentagem da População") +
+  labs(x = "Ano", y = "Porcentagem da população") +
   theme_estat() +
-  theme(legend.position = "bottom",
-        plot.title = element_text(hjust = 0.5)) +
+  theme(plot.title = element_text(hjust = 0.5)) +
   scale_x_continuous(breaks = seq(2012, 2022, by = 1)) +
   scale_y_continuous(labels = scales::percent_format(scale = 1))
 
@@ -276,16 +275,15 @@ ggplot(dados_pobreza, aes(x = data, y = indigenas_pobreza)) +
 
 ##Análise 1 
 
-ggplot(dados_anual, aes(x = ano, y = porcentagem, color = tipo)) +
+ggplot(dados_anual, aes(x = ano, y = porcentagem, color = Classe)) +
   geom_line(size = 1.2) +
   geom_point(size = 3) +
   scale_colour_manual(name = "Indicador", labels = c("Extrema Pobreza", "Pobreza", "Vulnerabilidade")) +
-  labs(x = "Ano", y = "Porcentagem da População") +
+  labs(x = "Ano", y = "Valor da população em escala") +
   theme_estat() +
-  theme(legend.position = "bottom",
-        plot.title = element_text(hjust = 0.5)) +
+  theme(plot.title = element_text(hjust = 0.5)) +
   scale_x_continuous(breaks = seq(2012, 2022, by = 1)) +
-  scale_y_continuous(labels = scales::percent_format(scale = 1))
+  scale_y_continuous()
 
 ##Análise 2
 
@@ -305,33 +303,7 @@ ggplot(b2, aes(x = factor(ano), y = Indivíduos/1e6, fill = Categoria)) +
 
 ##Quadro Análise 2 ##por algum motivo a tabela não roda no código, ele diz apresentar erro na linha
 
-\begin{table}[]
-\begin{tabular}{l}
-\textbackslash{}begin\{quadro\}{[}H{]}                                                                                                                                                                                           \\
-\textbackslash{}setlength\{\textbackslash{}tabcolsep\}\{9pt\}                                                                                                                                                                    \\
-\textbackslash{}renewcommand\{\textbackslash{}arraystretch\}\{1.20\}                                                                                                                                                             \\
-\textbackslash{}caption\{Medidas resumo das famílias em situação de pobreza, extrema pobreza e vulnerabilidade\}                                                                                                                 \\
-\textbackslash{}centering                                                                                                                                                                                                        \\
-\textbackslash{}begin\{adjustbox\}\{max width=\textbackslash{}textwidth\}                                                                                                                                                        \\
-\textbackslash{}begin\{tabular\}\{| l | S{[}table-format=7.0{]} | S{[}table-format=7.0{]} | S{[}table-format=7.0{]} |\}                                                                                                          \\
-\textbackslash{}hline                                                                                                                                                                                                            \\
-\textbackslash{}textbf\{Estatística\} \& \textbackslash{}textbf\{Famílias Pobreza\} \& \textbackslash{}textbf\{Famílias Extrema Pobreza\} \& \textbackslash{}textbf\{Famílias Vulnerabilidade\} \textbackslash{}\textbackslash{} \\
-\textbackslash{}hline                                                                                                                                                                                                            \\
-Média \& 3.842.206 \& 13.704.797 \& 18.547.003 \textbackslash{}\textbackslash{}                                                                                                                                                  \\
-Desvio Padrão \& 1.023.145 \& 2.876.421 \& 3.899.566 \textbackslash{}\textbackslash{}                                                                                                                                            \\
-Variância \& 1.046.826.058.081 \& 8.273.797.789.284 \& 15.206.615.718.489 \textbackslash{}\textbackslash{}                                                                                                                       \\
-Mínimo \& 2.746.503 \& 11.827.568 \& 15.569.214 \textbackslash{}\textbackslash{}                                                                                                                                                 \\
-1º Quartil \& 3.193.758 \& 12.347.966 \& 16.541.724 \textbackslash{}\textbackslash{}                                                                                                                                             \\
-Mediana \& 3.863.976 \& 13.164.979 \& 17.028.925 \textbackslash{}\textbackslash{}                                                                                                                                                \\
-3º Quartil \& 4.406.201 \& 14.795.038 \& 19.934.236 \textbackslash{}\textbackslash{}                                                                                                                                             \\
-Máximo \& 5.315.757 \& 19.820.117 \& 23.924.331 \textbackslash{}\textbackslash{}                                                                                                                                                 \\
-\textbackslash{}hline                                                                                                                                                                                                            \\
-\textbackslash{}end\{tabular\}                                                                                                                                                                                                   \\
-\textbackslash{}label\{quad:quadro\_resumo\_familias\}                                                                                                                                                                           \\
-\textbackslash{}end\{adjustbox\}                                                                                                                                                                                                 \\
-\textbackslash{}end\{quadro\}                                                                                                                                                                                                   
-\end{tabular}
-\end{table}
+
 
 
 #Análise 3
@@ -344,3 +316,18 @@ ggplot(b3, aes(x = proporcao_pobreza_geral, y = proporcao_pobreza_indigena)) +
   ) +
   geom_smooth(method = "lm", se = FALSE, COLOR = "blue")+
   theme_estat()
+
+#Análise 2 correção apresentação
+ggplot(b2) +
+  aes(
+    x = Categoria,
+    y = Indivíduos
+  ) +
+  geom_boxplot(fill = c("#A11D21"), width = 0.5) +
+  stat_summary(
+    fun = "mean", geom = "point", shape = 23, size = 3, fill = "white"
+  ) +
+  labs(x = "Categoria de pobreza", y = "Quantidade de indivíduos") +
+  theme_estat()
+
+

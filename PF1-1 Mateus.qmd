@@ -1,0 +1,317 @@
+---
+outpu-file: "Mateus"
+---
+
+```{r setup}
+#| include: false
+source("rdocs/consultor4.R")
+```
+
+# Introdução
+
+O seguinte projeto tem como objetivo analisar o comportamento da população em situação de vulnerabilidade social no Brasil, com foco em identificar padrões, diferenças e possíveis relações entre os diferentes grupos. Foram realizadas três análises: evolução das taxas dos índices de situação de pobreza; observação da distribuição dos tipos de pobreza nas famílias; se a população em situação de pobreza entre o grupo indígena acompanhou a tendência geral. Para isso, foram utilizadas análises descritivas e correlação. 
+
+O banco de dados utilizado foi fornecido pelo cliente e contém informações relacionadas à população em situação de vulnerabilidade social no Brasil, no período de 2012 a 2022. As variáveis presentes no banco representam a quantidade de indivíduos em situação de pobreza, extrema pobreza e o total de pessoas em vulnerabilidade, além de porcentagens dessas variáveis em relação à população estimada e variáveis específicas para famílias, indígenas, quilombolas e ciganos. Não foi informado se a amostra é probabilística, logo, o estudo seguiu com base nas informações fornecidas.
+
+ O software utilizado para as análises e para a construção do relatório foi o R, versão4.4.3 (2025-02-28 ucrt), por meio do ambiente de desenvolvimento RStudio.2
+
+
+# Referencial Teórico
+## Média
+
+A média é a soma das observações dividida pelo número total delas, dada pela fórmula:
+
+$$\bar{X}=\frac{\sum\limits_{i=1}^{n}X_i}{n}$$
+
+Com:
+
+-   $i = 1, \, 2, \, ..., \, n$
+
+-   $n =$ número total de observações
+
+## Mediana
+
+Sejam as $n$ observações de um conjunto de dados $X=X_{(1)},X_{(2)},\ldots, X_{(n)}$ de determinada variável ordenadas de forma crescente. A mediana do conjunto de dados $X$ é o valor que deixa metade das observações abaixo dela e metade dos dados acima.
+
+Com isso, pode-se calcular a mediana da seguinte forma:
+
+$$
+med(X) =
+    \begin{cases}
+         X_{\frac{n+1}{2}}, \textrm{para n ímpar} \\
+         \frac{X_{\frac{n}{2}}+X_{\frac{n}{2} + 1}}{2}, \textrm{para n par} \\
+    \end{cases}
+$$
+
+## Quartis
+
+Os quartis são separatrizes que dividem o conjunto de dados em quatro partes iguais. O primeiro quartil (ou inferior) delimita os 25% menores valores, o segundo representa a mediana, e o terceiro delimita os 25% maiores valores. Inicialmente deve-se calcular a posição do quartil:
+
+-   Posição do primeiro quartil $P_1$: $$P_1=\frac{n+1}{4}$$
+
+-   Posição da mediana (segundo quartil) $P_2$: $$P_2 = \frac{n+1}{2}$$
+
+-   Posição do terceiro quartil $P_3$: $$P_3=\frac{3 \times (n+1)}{4}$$
+
+Com $n$ sendo o tamanho da amostra. Dessa forma, $X_{\left( P_i \right)}$ é o valor do $i$-ésimo quartil, onde $X_{\left( j \right)}$ representa a $j$-ésima observação dos dados ordenados.
+
+Se o cálculo da posição resultar em uma fração, deve-se fazer a média entre o valor que está na posição do inteiro anterior e do seguinte ao da posição.
+
+## Variância
+
+A variância é uma medida que avalia o quanto os dados estão dispersos em relação à média, em uma escala ao quadrado da escala dos dados.
+### Variância Populacional
+
+Para uma população, a variância é dada por:
+
+$$\sigma^2=\frac{\sum\limits_{i=1}^{N}\left(X_i - \mu\right)^2}{N}$$
+
+Com:
+
+-   $X_i =$ $i$-ésima observação da população
+
+-   $\mu =$ média populacional
+
+-   $N =$ tamanho da população
+
+### Variância Amostral
+
+Para uma amostra, a variância é dada por:
+
+$$S^2=\frac{\sum\limits_{i=1}^{n}\left(X_i - \bar{X}\right)^2}{n-1}$$
+
+Com:
+
+-   $X_i =$ i-ésima observação da amostra
+
+-   $\bar{X} =$ média amostral
+
+-   $n =$ tamanho da amostra
+
+## Desvio Padrão
+
+O desvio padrão é a raiz quadrada da variância. Ele avalia o quanto os dados estão dispersos em relação à média.
+
+### Desvio Padrão Populacional
+
+Para uma população, o desvio padrão é dado por:
+
+$$\sigma=\sqrt{\frac{\sum\limits_{i=1}^{N}\left(X_i - \mu\right)^2}{N}}$$
+
+Com:
+
+-   $X_i =$ i-ésima observação da população
+
+-   $\mu =$ média populacional
+
+-   $N =$ tamanho da população
+
+### Desvio Padrão Amostral
+
+Para uma amostra, o desvio padrão é dado por:
+
+$$S=\sqrt{\frac{\sum\limits_{i=1}^{n}\left(X_i - \bar{X}\right)^2}{n-1}}$$
+
+Com:
+
+-   $X_i =$ i-ésima observação da amostra
+
+-   $\bar{X} =$ média amostral
+
+-   $n =$ tamanho da amostra
+
+## Coeficiente de Variação
+
+O coeficiente de variação fornece a dispersão dos dados em relação à média. Quanto menor for o seu valor, mais homogêneos serão os dados. O coeficiente de variação é considerado baixo (apontando um conjunto de dados homogêneo) quando for menor ou igual a 25%. Ele é dado pela fórmula:
+
+$$C_V=\frac{S}{\bar{X}}\times 100$$
+
+Com:
+
+-   $S =$ desvio padrão amostral
+
+-   $\bar{X} =$ média amostral
+
+## Tipos de Variáveis
+
+### Qualitativas
+
+As variáveis qualitativas são as variáveis não numéricas, que representam categorias ou características da população. Estas subdividem-se em:
+
+-   **Nominais**: quando não existe uma ordem entre as categorias da variável (exemplos: sexo, cor dos olhos, fumante ou não, etc)
+-   **Ordinais**: quando existe uma ordem entre as categorias da variável (exemplos: nível de escolaridade, mês, estágio de doença, etc)
+
+### Quantitativas
+
+As variáveis quantitativas são as variáveis numéricas, que representam características numéricas da população, ou seja, quantidades. Estas subdividem-se em:
+
+-   **Discretas**: quando os possíveis valores são enumeráveis (exemplos: número de filhos, número de cigarros fumados, etc)
+-   **Contínuas**: quando os possíveis valores são resultado de medições (exemplos: massa, altura, tempo, etc)
+
+## Coeficiente de Correlação de Pearson
+
+O coeficiente de correlação de Pearson é uma medida que verifica o grau de relação linear entre duas variáveis quantitativas. Este coeficiente varia entre os valores -1 e 1. O valor zero significa que não há relação linear entre as variáveis. Quando o valor do coeficiente $r$ é negativo, diz-se existir uma relação de grandeza inversamente proporcional entre as variáveis. Analogamente, quando $r$ é positivo, diz-se que as duas variáveis são diretamente proporcionais.
+
+O coeficiente de correlação de Pearson é normalmente representado pela letra $r$ e a sua fórmula de cálculo é:
+
+$$
+r_{Pearson} = \frac{\displaystyle \sum_{i=1}^{n} \left [ \left(x_i-\bar{x}\right) \left(y_i-\bar{y}\right) \right]}{\sqrt{\displaystyle \sum_{i=1}^{n} x_i^2 - n\bar{x}^2}  \times \sqrt{\displaystyle \sum_{i=1}^{n} y_i^2 - n\bar{y}^2}}
+$$
+
+Onde:
+
+-   $x_i =$ i-ésimo valor da variável $X$
+-   $y_i =$ i-ésimo valor da variável $Y$
+-   $\bar{x} =$ média dos valores da variável $X$
+-   $\bar{y} =$ média dos valores da variável $Y$
+
+Vale ressaltar que o coeficiente de Pearson é paramétrico e, portanto, sensível quanto à normalidade (simetria) dos dados.
+
+
+## Coeficiente de Contingência
+
+O coeficiente de contingência é derivado do Qui-Quadrado e ajusta seu valor para fornecer um referencial de comparação. Seu cálculo é:
+
+$$
+C=\sqrt{\frac{\chi^2}{\chi^2+n}}
+$$
+
+Onde:
+
+-   $\chi^2 =$ valor da estatística Qui-Quadrado
+-   $n =$ tamanho da amostra
+
+
+# Análises
+
+## Análise acerca das situações de pobreza na sociedade
+
+
+
+
+
+Essa análise tem por objetivo observar a evolução das taxas dos índices de situação de pobreza e foi realizada utilizando-se dos números colhidos afim de demonstrar a situação em que se encontra a população Brasileira no período entre 2012 e 2022, a seguir iremos dar ênfase nos pontos propostos e apresentar os resultados encontrados em nossas análises; as variáveis utilizadas foram as seguintes: porcentagem pobreza; porcentagem extrema pobreza; porcentagem vulnerabilidade, que são variáveis quantitativas contínuas e a variável ano, que é uma variável quantitativa discreta.
+
+
+
+
+
+
+
+
+```{r echo=FALSE}
+#| label: fig-Gráfico1
+#| fig-cap: "Gráfico de linhas porcentagem de pobreza por ano"
+
+ggplot(dados_anual, aes(x = ano, y = escala, color = Classe)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 3) +
+  scale_colour_manual(name = "Indicador", labels = c("Extrema Pobreza", "Pobreza", "Vulnerabilidade")) +
+  labs(x = "Ano", y = "Porcentagem da população") +
+  theme_estat() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_x_continuous(breaks = seq(2012, 2022, by = 1)) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1))
+
+  
+
+```
+
+
+A partir da análise da $\ref{fig-Gráfico1}$, percebe-se que comparando pobreza, extrema pobreza e vulnerabilidade revela tendências distintas ao longo da década (2012-2022). A pobreza geral (linha azul) apresentou uma trajetória de queda gradual, saindo de aproximadamente 10% em 2012 para 4% em 2022, indicando um avanço nas políticas de redução da pobreza moderada. Em contraste, a extrema pobreza (linha vermelha) mostrou maior volatilidade: após oscilações entre 22-23% no início da década, caiu para 18% em 2016, mas retornou aos patamares iniciais em 2022 (23%), evidenciando a persistência estrutural da miséria. Já a vulnerabilidade social (linha amarela) manteve-se em patamares elevados (24-33%), com redução temporária durante a pandemia (2020-2021), seguida de recuperação rápida, sugerindo que famílias saíram da pobreza apenas para entrar em risco social.
+
+
+
+
+
+## Análise acerca das situações das famílias
+
+
+ Essa análise tem por objetivo observar a situação dos tipos de pobreza nas famílias e foi realizada utilizando-se dos números colhidos afim de demonstrar a situação em que se encontra a população Brasileira no período entre 2012 e 2022, a seguir iremos dar ênfase nos pontos propostos e apresentar os resultados encontrados em nossas análises; as variáveis utilizadas foram as seguintes: familias pobreza; familias extrema pobreza; familias vulnerabilidade, que são variáveis quantitativas contínuas, a variável ano, que é uma variável quantitativa discreta e a variável categoria, uma variável qualitativa nominal.
+
+
+```{r echo=FALSE}
+#| label: fig-Gráfico2
+#| fig-cap: "Boxplot sobre a distribuição das situações econômicas por família"
+
+ggplot(b2) +
+  aes(
+    x = Categoria,
+    y = Indivíduos
+  ) +
+  geom_boxplot(fill = c("#A11D21"), width = 0.5) +
+  stat_summary(
+    fun = "mean", geom = "point", shape = 23, size = 3, fill = "white"
+  ) +
+  labs(x = "Categoria de pobreza", y = "Quantidade de indivíduos") +
+  theme_estat()
+  
+
+```
+
+
+A partir da análise da $\ref{fig-Gráfico2}$, evidencia-se a distribuição das quantidades de famílias para cada Tipo de Pobreza: Extrema Pobreza, Pobreza e Vulnerabilidade. Observa-se que a Classe de Vulnerabilidade apresenta as maiores quantidades de famílias, com uma distribuição caracterizada por maior amplitude entre os quartis, indicando maior variabilidade interna. A Classe de Pobreza possui quantidades medianas inferiores às da Vulnerabilidade, mas superiores às da Extrema Pobreza, demonstrando um padrão intermediário de concentração. A Extrema Pobreza exibe as menores quantidades de famílias, com uma distribuição mais compacta e menor dispersão, conforme indicado pelo comprimento reduzido da caixa e pela menor distância entre os quartis. Para todas as classes, os valores máximos e mínimos, representados pelos limites das caixas e pelos extremos dos bigodes, delimitam a amplitude da distribuição, permitindo visualizar a variabilidade interna e possíveis assimetrias.
+
+
+::: {#quad-1 layout-align="center" quad-pos="H"}
+```{=latex}
+\begin{tabular}{|l|rrr|}
+\hline
+\textbf{Estatística} &
+  \multicolumn{1}{l}{\textbf{Pobreza}} &
+  \multicolumn{1}{l}{\textbf{Extrema Pobreza}} &
+  \multicolumn{1}{l|}{\textbf{Vulnerabilidade}} \\ \hline
+Média         & 3842206 & 13704797 & 18547003 \\
+Desvio Padrão & 1023145 & 2876421  & 3899566  \\
+Mínimo        & 2746503 & 11827568 & 15569214 \\
+1º Quartil    & 3193758 & 12347966 & 16541724 \\
+Mediana       & 3863976 & 13164979 & 17028925 \\
+3º Quartil    & 4406201 & 14795038 & 19934236 \\
+Máximo        & 5315757 & 19820117 & 23924331 \\ \hline
+\end{tabular}
+
+
+```
+
+Medidas resumo da análise 2
+:::
+A partir da análise do [**Quadro** @quad-1] percebe-se que a pobreza possui uma média de aproximadamente 3,84 milhões de pessoas, com variação entre 2,75 e 5,32 milhões; a extrema pobreza, mais elevada, tem média de 13,70 milhões, variando de 11,83 a 19,82 milhões; e a vulnerabilidade social alcança média de 18,55 milhões, com valores entre 15,57 e 23,92 milhões. As três categorias apresentam ampla dispersão, evidenciada pelos respectivos desvios padrão — especialmente na extrema pobreza e vulnerabilidade. As medianas são próximas às médias, sugerindo distribuições relativamente simétricas, mas com significativa amplitude interquartil, refletindo heterogeneidade e magnitude expressiva dessas condições sociais.
+
+
+## Análise a partir da relação entre a pobreza dos indígenas em comparação á pobreza geral
+
+ Essa análise tem por objetivo acompanhar a evolução entre a taxa de indígenas em pobreza com relação à população total e foi realizada utilizando-se dos números colhidos afim de demonstrar a situação em que se encontra a população Brasileira no período entre 2012 e 2022, a seguir iremos dar ênfase nos pontos propostos e apresentar os resultados encontrados em nossas análises; as variáveis utilizadas foram as seguintes: pobreza, que é uma variável quantitativa contínua; indigenas pobreza, que é uma variável quantitativas discreta, e ambas são variáveis de razão. 
+
+
+```{r echo=FALSE}
+#| label: fig-Gráfico3
+#| fig-cap: "Gráfico de dispersão acerca da relação entre pobreza geral e pobreza entre indígenas"
+
+ggplot(b3, aes(x = proporcao_pobreza_geral, y = proporcao_pobreza_indigena)) +
+  geom_jitter(colour = "#A11D21", size = 3) +
+  labs(
+    x = "Pobreza na população geral (proporção)",
+    y = "Pobreza entre indígenas"
+  ) +
+  geom_smooth(method = "lm", se = FALSE, COLOR = "blue")+
+  theme_estat()
+  
+
+```
+
+
+A partir da análise da $\ref{fig-Gráfico3}$, vê-se uma relação diretamente proporcional entre os níveis de pobreza geral e indígena no Brasil, onde o aumento da pobreza na população em geral corresponde sistematicamente a índices ainda mais elevados entre os povos indígenas, evidenciando uma desigualdade estrutural persistente. Enquanto a pobreza geral apresentou uma redução de aproximadamente 47% no período analisado (caindo de 19,7 milhões para 8,4 milhões de pessoas), a queda entre a população indígena foi significativamente menor (27%, de 16,6 mil para 12,1 mil), demonstrando que as políticas universais de combate à pobreza têm impacto limitado nessas comunidades. A linha de tendência linear confirma essa correlação positiva, mas também destaca que mesmo nos períodos de menor pobreza geral, os indígenas permanecem em situação desproporcionalmente vulnerável, com valores consistentemente acima da média nacional. Essa análise aponta para a necessidade urgente de políticas públicas específicas e territorializadas que considerem as particularidades culturais e socioeconômicas dos povos originários, já que os mecanismos gerais de redistribuição de renda se mostram insuficientes para reduzir efetivamente as disparidades históricas que afetam essas populações.
+
+
+
+
+
+# Conclusão
+
+A análise da evolução das taxas de pobreza, extrema pobreza e vulnerabilidade ao longo da década revela padrões distintos. Enquanto a pobreza geral apresentou uma trajetória de declínio consistente (de 10% para 4%), refletindo avanços nas políticas sociais, a extrema pobreza demonstrou maior resistência, retornando em 2022 aos patamares críticos de 2012 (23%). Já a vulnerabilidade social manteve-se persistentemente alta (24-33%), com apenas quedas temporárias durante a pandemia, indicando que muitas famílias permanecem em situação de risco, mesmo quando superam a linha da pobreza. Esses resultados sugerem que, embora as políticas universais tenham sido eficazes para reduzir a pobreza moderada, falharam em combater as causas estruturais da miséria e da insegurança socioeconômica.
+
+A partir da análise sobre a distribuição das categorias de pobreza nas famílias, conclui-se que a distribuição das quantidades de famílias em cada categoria de pobreza reflete a complexidade e diversidade das condições sociais. A classe da vulnerabilidade social apresenta a maior quantidade de famílias e a maior variabilidade interna, evidenciada pela ampla amplitude interquartil. Por outro lado, a pobreza apresenta uma quantidade intermediária de famílias, enquanto a extrema pobreza, embora crítica, envolve a menor quantidade, com uma distribuição mais compacta e menos dispersa. Esse perfil sugere que a vulnerabilidade social é um fenômeno mais abrangente e heterogêneo, enquanto a extrema pobreza, apesar de mais concentrada, permanece como um núcleo resistente de desigualdade.
+
+A análise do quadro de medidas resumo reforça a magnitude dos desafios sociais no Brasil, ao revelar médias populacionais expressivas em todas as categorias: pobreza (3,84 milhões), extrema pobreza (13,70 milhões) e vulnerabilidade social (18,55 milhões). A amplitude dos valores e os desvios padrão elevados indicam grande dispersão e heterogeneidade entre os grupos. As medianas próximas às médias sugerem distribuições relativamente simétricas, mas a significativa amplitude interquartil demonstra que há uma variedade substancial nas condições vivenciadas pelas populações afetadas. Esses dados reforçam a necessidade de políticas direcionadas e diferenciadas, que considerem a diversidade de perfis e necessidades dessas populações.
+
+A análise comparativa entre a pobreza geral e a indígena expõe disparidades profundas e persistentes. Enquanto a pobreza nacional caiu 47%, a redução entre os povos indígenas foi significativamente menor (27%), e seus índices permaneceram consistentemente acima da média nacional. Essa desigualdade estrutural revela a insuficiência das políticas universais para atender às necessidades específicas dessas comunidades. A correlação positiva entre os indicadores sugere que melhorias na população geral beneficiam os indígenas, mas em proporção insuficiente. Portanto, é urgente implementar políticas territorializadas, que considerem as particularidades culturais e socioeconômicas dos povos originários, para romper o ciclo histórico de exclusão que os mantém em situação de vulnerabilidade desproporcional.
